@@ -687,7 +687,7 @@
                         </div>
                     </div>
 
-                    <!-- ส่วน 4: ตั้งค่าราคาแพคเกจ (แก้ไขใหม่) -->
+                    <!-- ส่วน 4: ตั้งค่าราคาแพคเกจ -->
                     <div id="setting-packages" class="setting-content hidden-view fade-in">
                         <div class="flex justify-between items-center mb-4 border-b pb-2">
                             <h3 class="font-bold text-lg text-gray-800">ตั้งค่าราคาแพคเกจระบบ</h3>
@@ -1137,6 +1137,11 @@
                         runner.loginAgent(args[0], args[1], args[2]);
                     }
                 } else {
+                    // ⚠️ เพิ่มการแจ้งเตือนหากเปิดไฟล์ตรงๆ จากคอมพิวเตอร์ ⚠️
+                    if(funcName === 'registerAgent') {
+                        alert("⚠️ คำเตือน: คุณกำลังเปิดไฟล์ HTML โดยตรง ไม่ได้เปิดผ่านลิงก์ของ Google Apps Script!\n\nระบบจะทำงานใน 'โหมดจำลอง' ข้อมูลจะไม่ถูกบันทึกลง Google Sheets ครับ");
+                    }
+                    
                     setTimeout(() => {
                         if (funcName === 'registerAgent') {
                             const year = new Date().getFullYear();
@@ -1279,9 +1284,13 @@
                 const result = await callBackend('registerAgent', data, sheetId);
                 if(result && result.success) {
                     msgBox.className = "mt-4 text-center p-5 bg-green-50 text-green-800 rounded-lg border border-green-200 font-medium fade-in shadow-sm";
+                    
+                    // ปรับข้อความ หากเป็นโหมดจำลอง
+                    const successText = result.message === "ลงทะเบียนสำเร็จ รอแอดมินอนุมัติ" ? "(ข้อมูลจำลอง)" : "";
+
                     msgBox.innerHTML = `
                         <i class="fa-solid fa-circle-check text-4xl mb-3 text-green-500"></i><br>
-                        <span class="text-lg font-bold">สมัครสมาชิกสำเร็จ!</span><br>
+                        <span class="text-lg font-bold">สมัครสมาชิกสำเร็จ! ${successText}</span><br>
                         รหัสตัวแทนของคุณคือ: <b class="text-xl text-green-700">${result.id}</b><br>
                         <span class="text-sm mt-3 block text-gray-600 bg-white p-2 rounded">โปรดรอ Admin ยืนยันระบบ</span>
                     `;
