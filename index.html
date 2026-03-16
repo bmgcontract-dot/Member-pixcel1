@@ -225,6 +225,7 @@
                                     <p id="profile-sales-total" class="font-bold text-2xl lg:text-3xl text-green-700">฿ 0.00</p>
                                 </div>
                             </div>
+                            <!-- หลอดพลัง -->
                             <div class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm">
                                 <div class="flex justify-between items-end mb-2">
                                     <p class="text-sm text-gray-600 font-bold">ความคืบหน้าสู่ระดับถัดไป</p>
@@ -268,7 +269,7 @@
                                             <option value="bbl" data-logo="https://ui-avatars.com/api/?name=B&background=1E4598&color=fff&font-size=0.6">ธนาคารกรุงเทพ (BBL)</option>
                                             <option value="ktb" data-logo="https://ui-avatars.com/api/?name=K&background=00AEEF&color=fff&font-size=0.6">ธนาคารกรุงไทย (KTB)</option>
                                             <option value="ttb" data-logo="https://ui-avatars.com/api/?name=T&background=0050f0&color=fff&font-size=0.6">ธนาคารทหารไทยธนชาต (TTB)</option>
-                                            <option value="bay" data-logo="https://ui-avatars.com/api/?name=B&background=F7C800&color=fff&font-size=0.6">ธนาคารกรุงศรีอยุธยา (BAY)</option>
+                                            <option value="bay" data-logo="https://ui-avatars.com/api/?name=B&background=F7C800&color=fff&font-size=0.6">ธนาคารกรศรีอยุธยา (BAY)</option>
                                             <option value="gsb" data-logo="https://ui-avatars.com/api/?name=G&background=EB198D&color=fff&font-size=0.6">ธนาคารออมสิน (GSB)</option>
                                         </select>
                                     </div>
@@ -351,6 +352,7 @@
                     </button>
                 </div>
                 <div id="product-list" class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl">
+                    <!-- การ์ดที่ 1 -->
                     <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100 hover:shadow-md transition flex flex-col">
                         <div class="w-12 h-12 bg-pastel-light text-pastel-dark rounded-lg flex items-center justify-center text-xl mb-4">
                             <i class="fa-solid fa-cash-register"></i>
@@ -501,7 +503,7 @@
                             <p class="text-sm text-red-600 mb-4">หากต้องการเปลี่ยน Database ให้สร้าง Google Sheet ใหม่แล้วเอา <b>Sheet ID</b> มาวางที่นี่ครับ</p>
                             <div>
                                 <input type="text" id="setting-sheet-id" placeholder="เช่น 1BxiMVs0XRX5nZYgNZJz..." class="w-full px-4 py-2 border border-red-300 rounded-lg focus:ring-2 focus:ring-red-400 outline-none mb-2">
-                                <div class="flex justify-end">
+                                <div class="flex justify-end mt-2">
                                     <button type="button" onclick="saveSheetId()" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-6 rounded-lg transition shadow-md flex items-center">
                                         <i class="fa-solid fa-link mr-2"></i> บันทึกการเชื่อมต่อ
                                     </button>
@@ -524,26 +526,26 @@
                             
                             <div>
                                 <label class="block text-sm font-semibold mb-1 text-gray-600">ชื่อบริษัท</label>
-                                <input type="text" id="comp-name" placeholder="ระบุชื่อบริษัท" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pastel outline-none">
+                                <input type="text" id="comp-name" placeholder="ระบุชื่อบริษัท" class="w-full px-4 py-2 border border-gray-300 rounded-lg outline-none">
                             </div>
                             <div>
                                 <label class="block text-sm font-semibold mb-1 text-gray-600">เลขประจำตัวผู้เสียภาษี (13 หลัก)</label>
-                                <input type="text" id="comp-tax" placeholder="ระบุเลขผู้เสียภาษี" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pastel outline-none">
+                                <input type="text" id="comp-tax" placeholder="ระบุเลขผู้เสียภาษี" class="w-full px-4 py-2 border border-gray-300 rounded-lg outline-none">
                             </div>
 
                             <div class="md:col-span-2">
                                 <label class="block text-sm font-semibold mb-1 text-gray-600">ที่อยู่บริษัท</label>
-                                <textarea id="comp-address" rows="2" placeholder="ระบุที่อยู่บริษัท" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pastel outline-none"></textarea>
+                                <textarea id="comp-address" rows="2" placeholder="ระบุที่อยู่บริษัท" class="w-full px-4 py-2 border border-gray-300 rounded-lg outline-none"></textarea>
                             </div>
                             
                             <div>
                                 <label class="block text-sm font-semibold mb-1 text-gray-600">เบอร์โทรติดต่อ</label>
-                                <input type="tel" id="comp-phone" placeholder="ระบุเบอร์โทรศัพท์" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pastel outline-none">
+                                <input type="tel" id="comp-phone" placeholder="ระบุเบอร์โทรศัพท์" class="w-full px-4 py-2 border border-gray-300 rounded-lg outline-none">
                             </div>
 
                             <div>
                                 <label class="block text-sm font-semibold mb-1 text-gray-600">เว็บไซต์ (Website)</label>
-                                <input type="url" id="comp-website" placeholder="https://www.example.com" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pastel outline-none">
+                                <input type="url" id="comp-website" placeholder="https://www.example.com" class="w-full px-4 py-2 border border-gray-300 rounded-lg outline-none">
                             </div>
                         </div>
                         <div class="flex justify-end pt-4 border-t border-gray-100">
@@ -600,27 +602,9 @@
                                 </thead>
                                 <tbody>
                                     <tr class="border-b hover:bg-gray-50">
-                                        <td class="px-4 py-3"><input type="text" value="Starter" class="w-full px-2 py-1 border border-gray-200 rounded font-bold text-gray-700 focus:ring-1 focus:ring-pastel outline-none"></td>
+                                        <td class="px-4 py-3"><input type="text" value="Starter" class="w-full px-2 py-1 border border-gray-200 rounded focus:ring-1 focus:ring-pastel outline-none"></td>
                                         <td class="px-4 py-3"><input type="number" value="0" class="w-24 px-2 py-1 border border-gray-200 rounded focus:ring-1 focus:ring-pastel outline-none"></td>
                                         <td class="px-4 py-3"><input type="number" value="10" class="w-20 px-2 py-1 border border-gray-200 rounded focus:ring-1 focus:ring-pastel outline-none"> %</td>
-                                        <td class="px-4 py-3 text-center"><button class="text-gray-400 hover:text-red-500" title="ลบระดับนี้"><i class="fa-solid fa-trash"></i></button></td>
-                                    </tr>
-                                    <tr class="border-b hover:bg-gray-50 bg-gray-50/50">
-                                        <td class="px-4 py-3"><input type="text" value="Silver" class="w-full px-2 py-1 border border-gray-200 rounded font-bold text-blue-600 focus:ring-1 focus:ring-pastel outline-none"></td>
-                                        <td class="px-4 py-3"><input type="number" value="50000" class="w-full px-2 py-1 border border-gray-200 rounded focus:ring-1 focus:ring-pastel outline-none"></td>
-                                        <td class="px-4 py-3"><input type="number" value="15" class="w-20 px-2 py-1 border border-gray-200 rounded focus:ring-1 focus:ring-pastel outline-none"> %</td>
-                                        <td class="px-4 py-3 text-center"><button class="text-gray-400 hover:text-red-500" title="ลบระดับนี้"><i class="fa-solid fa-trash"></i></button></td>
-                                    </tr>
-                                    <tr class="border-b hover:bg-gray-50">
-                                        <td class="px-4 py-3"><input type="text" value="Gold" class="w-full px-2 py-1 border border-gray-200 rounded font-bold text-yellow-500 focus:ring-1 focus:ring-pastel outline-none"></td>
-                                        <td class="px-4 py-3"><input type="number" value="150000" class="w-full px-2 py-1 border border-gray-200 rounded focus:ring-1 focus:ring-pastel outline-none"></td>
-                                        <td class="px-4 py-3"><input type="number" value="20" class="w-20 px-2 py-1 border border-gray-200 rounded focus:ring-1 focus:ring-pastel outline-none"> %</td>
-                                        <td class="px-4 py-3 text-center"><button class="text-gray-400 hover:text-red-500" title="ลบระดับนี้"><i class="fa-solid fa-trash"></i></button></td>
-                                    </tr>
-                                    <tr class="border-b hover:bg-gray-50 bg-gray-50/50">
-                                        <td class="px-4 py-3"><input type="text" value="VIP" class="w-full px-2 py-1 border border-gray-200 rounded font-bold text-purple-600 focus:ring-1 focus:ring-pastel outline-none"></td>
-                                        <td class="px-4 py-3"><input type="number" value="500000" class="w-full px-2 py-1 border border-gray-200 rounded focus:ring-1 focus:ring-pastel outline-none"></td>
-                                        <td class="px-4 py-3"><input type="number" value="25" class="w-20 px-2 py-1 border border-gray-200 rounded focus:ring-1 focus:ring-pastel outline-none"> %</td>
                                         <td class="px-4 py-3 text-center"><button class="text-gray-400 hover:text-red-500" title="ลบระดับนี้"><i class="fa-solid fa-trash"></i></button></td>
                                     </tr>
                                 </tbody>
@@ -677,20 +661,7 @@
                                         <td class="px-4 py-3 text-right"><input type="number" value="50" class="w-full max-w-[120px] px-2 py-1 border border-gray-200 rounded focus:ring-1 focus:ring-pastel outline-none text-right ml-auto"></td>
                                         <td class="px-4 py-3 text-center"><button class="text-gray-400 hover:text-red-500" title="ลบรายการนี้" onclick="this.closest('tr').remove()"><i class="fa-solid fa-trash"></i></button></td>
                                     </tr>
-                                    <tr class="border-b hover:bg-gray-50 package-row" data-product="crm">
-                                        <td class="px-4 py-3 text-center"><input type="number" value="2" class="w-16 px-2 py-1 border border-gray-200 rounded focus:ring-1 focus:ring-pastel outline-none text-center"></td>
-                                        <td class="px-4 py-3">
-                                            <div class="flex items-center justify-center gap-2">
-                                                <input type="number" value="51" placeholder="เริ่มต้น" class="w-24 px-2 py-1 border border-gray-200 rounded focus:ring-1 focus:ring-pastel outline-none text-center">
-                                                <span class="text-gray-400">ถึง</span>
-                                                <input type="number" value="100" placeholder="สูงสุด" class="w-24 px-2 py-1 border border-gray-200 rounded focus:ring-1 focus:ring-pastel outline-none text-center">
-                                            </div>
-                                        </td>
-                                        <td class="px-4 py-3 text-right"><input type="number" value="45" class="w-full max-w-[120px] px-2 py-1 border border-gray-200 rounded focus:ring-1 focus:ring-pastel outline-none text-right ml-auto"></td>
-                                        <td class="px-4 py-3 text-center"><button class="text-gray-400 hover:text-red-500" title="ลบรายการนี้" onclick="this.closest('tr').remove()"><i class="fa-solid fa-trash"></i></button></td>
-                                    </tr>
-                                    
-                                    <!-- แถวสำหรับ POS -->
+                                    <!-- แถวสำหรับ POS (ซ่อนไว้ก่อนเพราะ default คือ crm) -->
                                     <tr class="border-b hover:bg-gray-50 package-row hidden" data-product="pos">
                                         <td class="px-4 py-3 text-center"><input type="number" value="1" class="w-16 px-2 py-1 border border-gray-200 rounded focus:ring-1 focus:ring-pastel outline-none text-center"></td>
                                         <td class="px-4 py-3">
@@ -739,12 +710,9 @@
                             <textarea id="prod-desc" rows="2" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pastel outline-none"></textarea>
                         </div>
                         
-                        <!-- ส่วนแนบลิงก์ที่อัปเกรดให้เลือกระหว่าง URL หรือ อัปโหลดไฟล์ -->
                         <div class="border-t border-gray-100 pt-4 mt-2">
-                            <h4 class="font-bold text-sm text-gray-800 mb-3"><i class="fa-solid fa-link text-pastel-dark mr-1"></i> แนบเอกสารอ้างอิง <span class="text-gray-400 font-normal text-xs">(เลือกแบบ Link หรือ อัปโหลดไฟล์)</span></h4>
+                            <h4 class="font-bold text-sm text-gray-800 mb-3"><i class="fa-solid fa-link text-pastel-dark mr-1"></i> แนบเอกสารอ้างอิง</h4>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                
-                                <!-- Present -->
                                 <div class="p-3 bg-gray-50 rounded-lg border border-gray-100">
                                     <div class="flex justify-between items-center mb-2">
                                         <label class="block text-xs font-semibold text-gray-600"><i class="fa-solid fa-file-powerpoint text-blue-500 mr-1"></i> Presentation</label>
@@ -753,56 +721,12 @@
                                             <option value="file">อัปโหลดไฟล์</option>
                                         </select>
                                     </div>
-                                    <input type="url" id="prod-present-url" placeholder="https://" class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-300 outline-none transition">
+                                    <input type="url" id="prod-present-url" placeholder="https://" class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg outline-none">
                                     <input type="file" id="prod-present-file" accept="image/*,.pdf,.ppt,.pptx" class="hidden w-full text-xs text-gray-500 file:mr-2 file:py-1 file:px-3 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer border border-gray-300 rounded-lg bg-white" onchange="handleProductFileUpload('present', event)">
                                     <input type="hidden" id="prod-present-base64">
                                 </div>
-
-                                <!-- Demo -->
-                                <div class="p-3 bg-gray-50 rounded-lg border border-gray-100">
-                                    <div class="flex justify-between items-center mb-2">
-                                        <label class="block text-xs font-semibold text-gray-600"><i class="fa-solid fa-play-circle text-purple-500 mr-1"></i> Demo การใช้งาน</label>
-                                        <select class="text-[10px] bg-white border border-gray-300 rounded px-1 py-0.5 outline-none cursor-pointer" onchange="toggleAttachmentType('demo', this.value)">
-                                            <option value="url">ลิงก์ URL</option>
-                                            <option value="file">อัปโหลดไฟล์</option>
-                                        </select>
-                                    </div>
-                                    <input type="url" id="prod-demo-url" placeholder="https://" class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-300 outline-none transition">
-                                    <input type="file" id="prod-demo-file" accept="image/*,.mp4,.pdf" class="hidden w-full text-xs text-gray-500 file:mr-2 file:py-1 file:px-3 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100 cursor-pointer border border-gray-300 rounded-lg bg-white" onchange="handleProductFileUpload('demo', event)">
-                                    <input type="hidden" id="prod-demo-base64">
-                                </div>
-
-                                <!-- Price -->
-                                <div class="p-3 bg-gray-50 rounded-lg border border-gray-100">
-                                    <div class="flex justify-between items-center mb-2">
-                                        <label class="block text-xs font-semibold text-gray-600"><i class="fa-solid fa-tags text-green-500 mr-1"></i> ราคาแพคเกจ</label>
-                                        <select class="text-[10px] bg-white border border-gray-300 rounded px-1 py-0.5 outline-none cursor-pointer" onchange="toggleAttachmentType('price', this.value)">
-                                            <option value="url">ลิงก์ URL</option>
-                                            <option value="file">อัปโหลดไฟล์</option>
-                                        </select>
-                                    </div>
-                                    <input type="url" id="prod-price-url" placeholder="https://" class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-300 outline-none transition">
-                                    <input type="file" id="prod-price-file" accept="image/*,.pdf" class="hidden w-full text-xs text-gray-500 file:mr-2 file:py-1 file:px-3 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100 cursor-pointer border border-gray-300 rounded-lg bg-white" onchange="handleProductFileUpload('price', event)">
-                                    <input type="hidden" id="prod-price-base64">
-                                </div>
-
-                                <!-- Poster -->
-                                <div class="p-3 bg-gray-50 rounded-lg border border-gray-100">
-                                    <div class="flex justify-between items-center mb-2">
-                                        <label class="block text-xs font-semibold text-gray-600"><i class="fa-solid fa-image text-orange-500 mr-1"></i> โปสเตอร์</label>
-                                        <select class="text-[10px] bg-white border border-gray-300 rounded px-1 py-0.5 outline-none cursor-pointer" onchange="toggleAttachmentType('poster', this.value)">
-                                            <option value="url">ลิงก์ URL</option>
-                                            <option value="file">อัปโหลดไฟล์</option>
-                                        </select>
-                                    </div>
-                                    <input type="url" id="prod-poster-url" placeholder="https://" class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-300 outline-none transition">
-                                    <input type="file" id="prod-poster-file" accept="image/*" class="hidden w-full text-xs text-gray-500 file:mr-2 file:py-1 file:px-3 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-orange-50 file:text-orange-700 hover:file:bg-orange-100 cursor-pointer border border-gray-300 rounded-lg bg-white" onchange="handleProductFileUpload('poster', event)">
-                                    <input type="hidden" id="prod-poster-base64">
-                                </div>
-
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -827,11 +751,11 @@
                     <div class="grid grid-cols-1 gap-4">
                         <div>
                             <label class="block text-sm font-semibold mb-1 text-gray-700">ชื่อบริษัท / ลูกค้า <span class="text-red-500">*</span></label>
-                            <input type="text" id="cust-company" placeholder="ระบุชื่อบริษัท หรือ ชื่อลูกค้า" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pastel outline-none">
+                            <input type="text" id="cust-company" class="w-full px-4 py-2 border border-gray-300 rounded-lg outline-none">
                         </div>
                         <div>
                             <label class="block text-sm font-semibold mb-1 text-gray-700">ที่อยู่</label>
-                            <textarea id="cust-address" rows="2" placeholder="ระบุที่อยู่ของบริษัท/ลูกค้า" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pastel outline-none"></textarea>
+                            <textarea id="cust-address" rows="2" class="w-full px-4 py-2 border border-gray-300 rounded-lg outline-none"></textarea>
                         </div>
                     </div>
 
@@ -839,23 +763,23 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-sm font-semibold mb-1 text-gray-700">ชื่อผู้ติดต่อ <span class="text-red-500">*</span></label>
-                            <input type="text" id="cust-contact-name" placeholder="ระบุชื่อผู้ที่ใช้ประสานงาน" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pastel outline-none">
+                            <input type="text" id="cust-contact-name" class="w-full px-4 py-2 border border-gray-300 rounded-lg outline-none">
                         </div>
                         <div>
                             <label class="block text-sm font-semibold mb-1 text-gray-700">เบอร์โทรศัพท์ติดต่อ <span class="text-red-500">*</span></label>
-                            <input type="tel" id="cust-phone" placeholder="08X-XXX-XXXX" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pastel outline-none">
+                            <input type="tel" id="cust-phone" class="w-full px-4 py-2 border border-gray-300 rounded-lg outline-none">
                         </div>
                     </div>
 
-                    <h4 class="font-bold text-gray-700 border-b pb-2 mt-4"><i class="fa-solid fa-city mr-2 text-pastel-dark"></i>ข้อมูลหน่วยงาน (สำหรับคำนวณแพคเกจ)</h4>
+                    <h4 class="font-bold text-gray-700 border-b pb-2 mt-4"><i class="fa-solid fa-city mr-2 text-pastel-dark"></i>ข้อมูลหน่วยงาน</h4>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 bg-gray-50 p-4 rounded-lg border border-gray-200">
                         <div class="md:col-span-2">
                             <label class="block text-sm font-semibold mb-1 text-gray-700">ชื่อหน่วยงาน / โครงการ <span class="text-red-500">*</span></label>
-                            <input type="text" id="cust-branch" placeholder="เช่น สาขา 1, โครงการ A" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pastel outline-none">
+                            <input type="text" id="cust-branch" class="w-full px-4 py-2 border border-gray-300 rounded-lg outline-none">
                         </div>
                         <div>
                             <label class="block text-sm font-semibold mb-1 text-gray-700">อัตราแพคเกจระบบ</label>
-                            <select id="cust-package" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pastel outline-none bg-white cursor-pointer" onchange="calculateCustomerPrice()">
+                            <select id="cust-package" class="w-full px-4 py-2 border border-gray-300 rounded-lg outline-none bg-white cursor-pointer" onchange="calculateCustomerPrice()">
                                 <option value="30">Standard Package (30 บาท/ห้อง)</option>
                                 <option value="50" selected>Premium Package (50 บาท/ห้อง)</option>
                                 <option value="100">Enterprise Package (100 บาท/ห้อง)</option>
@@ -863,10 +787,9 @@
                         </div>
                         <div>
                             <label class="block text-sm font-semibold mb-1 text-gray-700">จำนวนห้อง / บ้าน (ยูนิต) <span class="text-red-500">*</span></label>
-                            <input type="number" id="cust-units" min="0" placeholder="ระบุจำนวน" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pastel outline-none" oninput="calculateCustomerPrice()">
+                            <input type="number" id="cust-units" min="0" class="w-full px-4 py-2 border border-gray-300 rounded-lg outline-none" oninput="calculateCustomerPrice()">
                         </div>
                         
-                        <!-- แสดงผลการคำนวณ -->
                         <div class="md:col-span-2 mt-2 p-4 bg-blue-50 border border-blue-200 rounded-lg text-center flex flex-col justify-center items-center">
                             <span class="text-sm text-blue-800 font-semibold mb-1"><i class="fa-solid fa-calculator mr-1"></i> ราคาแพคเกจต่อเดือนที่ต้องชำระ:</span>
                             <div id="cust-calculated-price" class="text-3xl font-bold text-blue-700 shadow-sm bg-white px-6 py-2 rounded-lg border border-blue-100 min-w-[200px]">฿ 0.00</div>
@@ -896,12 +819,6 @@
         // ==========================================
         // ฟังก์ชันช่วยเหลือ UI ทั่วไป
         // ==========================================
-        function saveSheetId() {
-            const sheetId = document.getElementById('setting-sheet-id').value.trim();
-            localStorage.setItem('pixcel_sheet_id', sheetId);
-            alert('บันทึก Sheet ID เรียบร้อยแล้ว ระบบจะเชื่อมต่อกับไฟล์ใหม่ทันทีครับ');
-        }
-
         function clearInputs(containerId) {
             const container = document.getElementById(containerId);
             if (!container) return;
@@ -962,328 +879,14 @@
         }
 
         // ==========================================
-        // เชื่อมต่อ Backend (GAS)
+        // การจัดการข้อมูลบริษัท
         // ==========================================
-        function callBackend(funcName, ...args) {
-            return new Promise((resolve, reject) => {
-                if (typeof google !== 'undefined' && google.script && google.script.run) {
-                    const runner = google.script.run
-                        .withSuccessHandler(resolve)
-                        .withFailureHandler(reject);
-                    
-                    if (funcName === 'registerAgent') runner.registerAgent(args[0], args[1]);
-                    else if (funcName === 'loginAgent') runner.loginAgent(args[0], args[1], args[2]);
-                    else if (funcName === 'getAdminDashboardData') runner.getAdminDashboardData(args[0]);
-                    else if (funcName === 'approveAgent') runner.approveAgent(args[0], args[1]);
-                    else if (funcName === 'rejectAgent') runner.rejectAgent(args[0], args[1]);
-                } else {
-                    // โหมดจำลอง
-                    setTimeout(() => {
-                        if (funcName === 'registerAgent') {
-                            const year = new Date().getFullYear();
-                            const randNum = Math.floor(Math.random()*100).toString().padStart(3,'0');
-                            resolve({ success: true, id: `pc-${year}-${randNum}`, message: "ลงทะเบียนสำเร็จ รอแอดมินอนุมัติ" });
-                        } else if (funcName === 'loginAgent') {
-                            const user = args[0];
-                            const pass = args[1];
-                            if (user === "admin" && pass === "bosskim") {
-                                resolve({ success: true, data: { id: "SUPER-ADMIN", name: "Boss Kim", level: "Super Admin", email: "admin@pixcel.com" }});
-                            } else {
-                                resolve({ success: true, data: { id: "pc-2026-001", name: "ทดสอบ ตัวแทน", level: "Starter", email: user, address: "123 กทม.", phone: "0801234567", salesThisMonth: 5500, sales: 15000 }});
-                            }
-                        } else if (funcName === 'getAdminDashboardData') {
-                            resolve({
-                                success: true, 
-                                users: [
-                                    { id: 'pc-2026-002', name: 'นายทดสอบ รออนุมัติ', status: 'Pending', email: 'test@mail.com', phone: '0811111111' },
-                                    { id: 'pc-2026-001', name: 'ทดสอบ ตัวแทนจำหน่าย', status: 'Approved', email: 'demo@mail.com', phone: '0822222222' }
-                                ]
-                            });
-                        } else if (funcName === 'approveAgent' || funcName === 'rejectAgent') {
-                            resolve({ success: true });
-                        }
-                    }, 800);
-                }
-            });
+        function saveSheetId() {
+            const sheetId = document.getElementById('setting-sheet-id').value.trim();
+            localStorage.setItem('pixcel_sheet_id', sheetId);
+            alert('บันทึก Sheet ID เรียบร้อยแล้ว ระบบจะเชื่อมต่อกับไฟล์ใหม่ทันทีครับ');
         }
 
-        // === โหลดและแสดงผลตารางฝั่ง Admin ===
-        async function loadAdminData() {
-            const sheetId = localStorage.getItem('pixcel_sheet_id') || '';
-            const tbody = document.getElementById('admin-user-list-body');
-            tbody.innerHTML = '<tr><td colspan="4" class="text-center py-4"><i class="fa-solid fa-spinner fa-spin text-pastel-dark"></i> กำลังโหลดข้อมูล...</td></tr>';
-            
-            try {
-                const result = await callBackend('getAdminDashboardData', sheetId);
-                if (result && result.success) {
-                    renderAdminUserTable(result.users || []);
-                } else {
-                    tbody.innerHTML = `<tr><td colspan="4" class="text-center py-4 text-red-500">${result ? result.message : 'โหลดข้อมูลล้มเหลว'}</td></tr>`;
-                }
-            } catch (e) {
-                tbody.innerHTML = '<tr><td colspan="4" class="text-center py-4 text-red-500">เกิดข้อผิดพลาดในการเชื่อมต่อ</td></tr>';
-            }
-        }
-
-        function renderAdminUserTable(users) {
-            const tbody = document.getElementById('admin-user-list-body');
-            tbody.innerHTML = '';
-            let pendingCount = 0;
-            
-            if (users.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="4" class="text-center py-4 text-gray-500">ยังไม่มีผู้ใช้งานในระบบ</td></tr>';
-            } else {
-                users.forEach(u => {
-                    if(u.id === "SUPER-ADMIN") return;
-                    if (u.status === 'Pending') pendingCount++;
-                    
-                    let statusBadge = u.status === 'Pending' ? 
-                        `<span class="bg-yellow-100 text-yellow-800 text-xs font-bold px-2 py-1 rounded">รออนุมัติ</span>` : 
-                        `<span class="bg-green-100 text-green-800 text-xs font-bold px-2 py-1 rounded">อนุมัติแล้ว</span>`;
-                    
-                    let actionBtns = u.status === 'Pending' ? `
-                        <button onclick="handleApprove('${u.id}')" class="text-white bg-pastel hover:bg-pastel-dark px-3 py-1 rounded text-xs font-bold transition shadow-sm mx-0.5">อนุมัติ</button>
-                        <button onclick="handleReject('${u.id}')" class="text-white bg-red-400 hover:bg-red-500 px-3 py-1 rounded text-xs font-bold transition shadow-sm mx-0.5">ปฏิเสธ</button>
-                    ` : `<span class="text-gray-400 text-xs">จัดการแล้ว</span>`;
-
-                    const tr = document.createElement('tr');
-                    tr.className = 'border-b hover:bg-gray-50';
-                    tr.innerHTML = `
-                        <td class="px-4 py-3 font-medium text-gray-900">${u.id}</td>
-                        <td class="px-4 py-3">
-                            <div class="font-bold text-gray-800">${u.name}</div>
-                            <div class="text-xs text-gray-500"><i class="fa-solid fa-envelope mr-1"></i>${u.email} <br><i class="fa-solid fa-phone mr-1"></i>${u.phone || '-'}</div>
-                        </td>
-                        <td class="px-4 py-3">${statusBadge}</td>
-                        <td class="px-4 py-3 text-center">${actionBtns}</td>
-                    `;
-                    tbody.appendChild(tr);
-                });
-            }
-            
-            // อัปเดตกระดิ่งแจ้งเตือน
-            const navBadge = document.getElementById('nav-badge-pending');
-            const floatBell = document.getElementById('floating-bell');
-            const floatCount = document.getElementById('floating-badge-count');
-            
-            if (pendingCount > 0) {
-                navBadge.innerText = pendingCount;
-                navBadge.classList.remove('hidden');
-                floatCount.innerText = pendingCount;
-                floatBell.classList.remove('hidden');
-            } else {
-                navBadge.classList.add('hidden');
-                floatBell.classList.add('hidden');
-            }
-        }
-
-        async function handleApprove(id) {
-            if(!confirm(`ต้องการ 'อนุมัติ' ผู้ใช้งานรหัส ${id} ใช่หรือไม่?\n(ระบบจะสุ่มรหัสผ่านและส่งอีเมลให้ผู้ใช้)`)) return;
-            const sheetId = localStorage.getItem('pixcel_sheet_id') || '';
-            try {
-                const res = await callBackend('approveAgent', id, sheetId);
-                if(res && res.success) { 
-                    if(res.emailError) {
-                        alert("✅ อนุมัติสำเร็จ! แต่ส่งอีเมลไม่ได้: " + res.emailError + "\n\n⚠️ กรุณาตั้งค่าสิทธิ์ Gmail ในหน้า Google Apps Script ครับ");
-                    } else {
-                        alert("✅ อนุมัติและส่งอีเมลแจ้งรหัสผ่านสำเร็จ!"); 
-                    }
-                    loadAdminData(); 
-                }
-                else { alert("❌ ผิดพลาด: " + res.message); }
-            } catch(e) { alert("ล้มเหลวในการเชื่อมต่อ"); }
-        }
-
-        async function handleReject(id) {
-            if(!confirm(`ต้องการ 'ปฏิเสธและลบ' ผู้ใช้งานรหัส ${id} ใช่หรือไม่?`)) return;
-            const sheetId = localStorage.getItem('pixcel_sheet_id') || '';
-            try {
-                const res = await callBackend('rejectAgent', id, sheetId);
-                if(res && res.success) { alert("ลบข้อมูลสำเร็จ!"); loadAdminData(); }
-                else { alert("ผิดพลาด: " + res.message); }
-            } catch(e) { alert("ล้มเหลว"); }
-        }
-
-        // === ฟังก์ชัน สมัครสมาชิก (แก้ไขให้ดึงข้อมูลครบถ้วน 100%) ===
-        async function handleRegister() {
-            // ดึงข้อมูลให้ชัวร์
-            const nameInput = document.getElementById('reg-name').value.trim();
-            const addressInput = document.getElementById('reg-address').value.trim();
-            const phoneInput = document.getElementById('reg-phone').value.trim();
-            const emailInput = document.getElementById('reg-email').value.trim();
-
-            if(!nameInput || !addressInput || !phoneInput || !emailInput) {
-                alert("กรุณากรอกข้อมูลให้ครบถ้วนก่อนยืนยันการสมัคร");
-                return;
-            }
-
-            const btn = document.getElementById('btn-register');
-            const msgBox = document.getElementById('reg-message');
-            
-            msgBox.classList.add('hidden');
-            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> กำลังดำเนินการ...';
-            btn.disabled = true;
-
-            const data = { name: nameInput, address: addressInput, phone: phoneInput, email: emailInput };
-            const sheetId = localStorage.getItem('pixcel_sheet_id') || '';
-
-            try {
-                const result = await callBackend('registerAgent', data, sheetId);
-                if(result && result.success) {
-                    msgBox.className = "mt-4 text-center p-5 bg-green-50 text-green-800 rounded-lg border border-green-200 font-medium fade-in shadow-sm";
-                    const successText = result.message === "ลงทะเบียนสำเร็จ รอแอดมินอนุมัติ" ? "(ข้อมูลจำลอง)" : "";
-                    msgBox.innerHTML = `
-                        <i class="fa-solid fa-circle-check text-4xl mb-3 text-green-500"></i><br>
-                        <span class="text-lg font-bold">สมัครสมาชิกสำเร็จ! ${successText}</span><br>
-                        รหัสตัวแทนของคุณคือ: <b class="text-xl text-green-700">${result.id}</b><br>
-                        <span class="text-sm mt-3 block text-gray-600 bg-white p-2 rounded">โปรดรอ Admin ยืนยันระบบ</span>
-                    `;
-                    msgBox.classList.remove('hidden');
-                    clearInputs('form-register');
-                    btn.classList.add('hidden'); 
-                } else {
-                    alert("ข้อผิดพลาด: " + (result ? result.message : 'ไม่ทราบสาเหตุ'));
-                    btn.innerHTML = '<i class="fa-solid fa-user-plus mr-2"></i> ยืนยันการสมัคร';
-                    btn.disabled = false;
-                }
-            } catch (error) {
-                alert("การเชื่อมต่อล้มเหลว กรุณาลองใหม่อีกครั้ง");
-                btn.innerHTML = '<i class="fa-solid fa-user-plus mr-2"></i> ยืนยันการสมัคร';
-                btn.disabled = false;
-            }
-        }
-
-        // === ฟังก์ชัน Login ===
-        async function handleLogin() {
-            const user = document.getElementById('login-username').value.trim();
-            const pass = document.getElementById('login-password').value.trim();
-
-            if(!user || !pass) {
-                alert("กรุณากรอก Username และ Password ให้ครบถ้วน");
-                return;
-            }
-            
-            const btn = document.getElementById('btn-login');
-            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> กำลังเข้าสู่ระบบ...';
-            btn.disabled = true;
-
-            const sheetId = localStorage.getItem('pixcel_sheet_id') || '';
-
-            try {
-                const result = await callBackend('loginAgent', user, pass, sheetId);
-                if(result && result.success) {
-                    const d = result.data;
-                    document.getElementById('dash-username').innerText = d.name.split(' ')[0];
-                    document.getElementById('profile-id').innerText = d.id;
-                    document.getElementById('profile-name').innerText = d.name;
-                    
-                    // ป้องกันค่าว่างแสดงเป็นขีด
-                    document.getElementById('profile-address').innerText = (d.address && d.address !== "undefined") ? d.address : '-';
-                    document.getElementById('profile-phone').innerText = (d.phone && d.phone !== "undefined") ? d.phone : '-';
-                    document.getElementById('profile-email').innerText = (d.email && d.email !== "undefined") ? d.email : '-';
-
-                    let commRate = 0.10; 
-                    if (d.level === 'Silver') commRate = 0.15;
-                    if (d.level === 'Gold') commRate = 0.20;
-                    if (d.level === 'VIP') commRate = 0.25;
-                    
-                    if (d.level === "Super Admin") {
-                        document.getElementById('dash-level').className = "inline-block mt-1 px-3 py-1 bg-red-100 text-red-600 rounded-full text-xs font-bold";
-                        document.getElementById('dash-level').innerText = "Super Admin";
-                        
-                        document.getElementById('profile-level').innerHTML = `<i class="fa-solid fa-crown"></i> Super Admin`;
-                        document.getElementById('profile-level').className = "font-bold text-lg text-red-600";
-                        
-                        document.getElementById('menu-settings').classList.remove('hidden');
-                        document.getElementById('btn-add-product').classList.remove('hidden');
-                        
-                        document.getElementById('profile-sales-dashboard').classList.add('hidden');
-                        document.getElementById('profile-sales-total').innerText = "฿ 0.00";
-                        document.getElementById('profile-sales-month').innerText = "฿ 0.00";
-                        document.getElementById('profile-commission-month').innerText = "฿ 0.00";
-                        document.getElementById('profile-comm-rate').innerText = "Rate: N/A";
-                        
-                        loadAdminData(); // โหลดกระดิ่งแจ้งเตือน
-                    } else {
-                        document.getElementById('dash-level').className = "inline-block mt-1 px-3 py-1 bg-pastel-light text-pastel-dark rounded-full text-xs font-semibold";
-                        document.getElementById('dash-level').innerText = d.level;
-                        
-                        document.getElementById('profile-level').innerHTML = `<i class="fa-solid fa-star"></i> ${d.level}`;
-                        document.getElementById('profile-level').className = "font-bold text-lg text-yellow-500";
-                        
-                        document.getElementById('menu-settings').classList.add('hidden');
-                        document.getElementById('btn-add-product').classList.add('hidden');
-                        document.getElementById('floating-bell').classList.add('hidden');
-                        
-                        document.getElementById('profile-sales-dashboard').classList.remove('hidden');
-                        
-                        const salesMonth = d.salesThisMonth || 0;
-                        const commissionMonth = salesMonth * commRate;
-                        
-                        const formatSalesTotal = new Intl.NumberFormat('th-TH', { style: 'currency', currency: 'THB' }).format(d.sales || 0);
-                        const formatSalesMonth = new Intl.NumberFormat('th-TH', { style: 'currency', currency: 'THB' }).format(salesMonth);
-                        const formatCommission = new Intl.NumberFormat('th-TH', { style: 'currency', currency: 'THB' }).format(commissionMonth);
-                        
-                        document.getElementById('profile-sales-total').innerText = formatSalesTotal;
-                        document.getElementById('profile-sales-month').innerText = formatSalesMonth;
-                        document.getElementById('profile-commission-month').innerText = formatCommission;
-                        document.getElementById('profile-comm-rate').innerText = `Rate: ${commRate * 100}%`;
-                        
-                        const targetSilver = 50000;
-                        let progress = ((d.sales || 0) / targetSilver) * 100;
-                        if(progress > 100) progress = 100;
-                        setTimeout(() => { document.getElementById('profile-progress').style.width = progress + "%"; }, 300);
-                    }
-
-                    switchView('view-dashboard');
-                } else {
-                    alert("ข้อผิดพลาด: " + (result ? result.message : 'การเข้าสู่ระบบล้มเหลว'));
-                }
-            } catch (error) {
-                alert("เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์");
-            } finally {
-                btn.innerHTML = '<i class="fa-solid fa-right-to-bracket mr-2"></i> เข้าสู่ระบบ';
-                btn.disabled = false;
-            }
-        }
-
-        // ==========================================
-        // ฟังก์ชันข้ามเข้าสู่ Dashboard ทันที (สำหรับทดสอบ)
-        // ==========================================
-        function bypassToDashboard() {
-            document.getElementById('dash-username').innerText = "Boss Kim";
-            document.getElementById('dash-level').className = "inline-block mt-1 px-3 py-1 bg-red-100 text-red-600 rounded-full text-xs font-bold";
-            document.getElementById('dash-level').innerText = "Super Admin";
-            
-            document.getElementById('profile-id').innerText = "SUPER-ADMIN";
-            document.getElementById('profile-name').innerText = "Boss Kim (ผู้บริหาร)";
-            document.getElementById('profile-level').innerHTML = `<i class="fa-solid fa-crown"></i> Super Admin`;
-            document.getElementById('profile-level').className = "font-bold text-lg text-red-600";
-            
-            // เปิด Dashboard ให้แอดมินเห็นด้วย
-            document.getElementById('profile-sales-dashboard').classList.remove('hidden');
-            document.getElementById('profile-sales-total').innerText = "฿ 150,000.00";
-            document.getElementById('profile-sales-month').innerText = "฿ 50,000.00";
-            document.getElementById('profile-commission-month').innerText = "฿ 0.00";
-            document.getElementById('profile-comm-rate').innerText = "Rate: Admin";
-            
-            document.getElementById('menu-settings').classList.remove('hidden');
-            document.getElementById('btn-add-product').classList.remove('hidden');
-            
-            loadAdminData(); // โหลดกระดิ่งแจ้งเตือน
-            
-            switchView('view-dashboard');
-        }
-
-        function handleLogout() {
-            switchView('view-login');
-            switchTab('tab-profile', document.querySelector('.tab-btn'));
-            document.getElementById('floating-bell').classList.add('hidden');
-        }
-
-        // ==========================================
-        // ฟังก์ชันการอัปโหลดโลโก้บริษัท และ การจัดการข้อมูลบริษัท
-        // ==========================================
         function handleCompanyLogoUpload(event) {
             const file = event.target.files[0];
             if (!file) return;
@@ -1367,16 +970,49 @@
         }
 
         // ==========================================
-        // ฟังก์ชันสำหรับผลิตภัณฑ์ใหม่ (สลับ URL/File)
+        // การจัดการผลิตภัณฑ์ และ แพคเกจ
         // ==========================================
-        function openAddProductModal() { 
-            document.getElementById('modal-add-product').classList.remove('hidden-view'); 
+        function filterPackages() {
+            const selectedProduct = document.getElementById('package-product-selector').value;
+            const rows = document.querySelectorAll('.package-row');
+            rows.forEach(row => {
+                if(row.getAttribute('data-product') === selectedProduct) {
+                    row.classList.remove('hidden');
+                } else {
+                    row.classList.add('hidden');
+                }
+            });
         }
-        
+
+        function addPackageRow() {
+            const selectedProduct = document.getElementById('package-product-selector').value;
+            const tbody = document.getElementById('package-list-body');
+            
+            const visibleRows = Array.from(tbody.querySelectorAll('.package-row')).filter(r => r.getAttribute('data-product') === selectedProduct);
+            const nextSeq = visibleRows.length + 1;
+
+            const tr = document.createElement('tr');
+            tr.className = "border-b hover:bg-gray-50 package-row fade-in";
+            tr.setAttribute('data-product', selectedProduct);
+            tr.innerHTML = `
+                <td class="px-4 py-3 text-center"><input type="number" value="${nextSeq}" class="w-16 px-2 py-1 border border-gray-200 rounded focus:ring-1 focus:ring-pastel outline-none text-center"></td>
+                <td class="px-4 py-3">
+                    <div class="flex items-center justify-center gap-2">
+                        <input type="number" value="" placeholder="เริ่มต้น" class="w-24 px-2 py-1 border border-gray-200 rounded focus:ring-1 focus:ring-pastel outline-none text-center">
+                        <span class="text-gray-400">ถึง</span>
+                        <input type="number" value="" placeholder="สูงสุด" class="w-24 px-2 py-1 border border-gray-200 rounded focus:ring-1 focus:ring-pastel outline-none text-center">
+                    </div>
+                </td>
+                <td class="px-4 py-3 text-right"><input type="number" value="" class="w-full max-w-[120px] px-2 py-1 border border-gray-200 rounded focus:ring-1 focus:ring-pastel outline-none text-right ml-auto"></td>
+                <td class="px-4 py-3 text-center"><button class="text-gray-400 hover:text-red-500" title="ลบรายการนี้" onclick="this.closest('tr').remove()"><i class="fa-solid fa-trash"></i></button></td>
+            `;
+            tbody.appendChild(tr);
+        }
+
+        function openAddProductModal() { document.getElementById('modal-add-product').classList.remove('hidden-view'); }
         function closeAddProductModal() { 
             document.getElementById('modal-add-product').classList.add('hidden-view'); 
             clearInputs('form-add-product'); 
-            // รีเซ็ตการแสดงผลช่องอัปโหลดกลับไปเป็น URL
             ['present', 'demo', 'price', 'poster'].forEach(type => {
                 const select = document.querySelector(`select[onchange="toggleAttachmentType('${type}', this.value)"]`);
                 if(select) {
@@ -1409,7 +1045,7 @@
                 document.getElementById(`prod-${type}-base64`).value = '';
                 return;
             }
-            if (file.size > 5 * 1024 * 1024) { // จำกัดขนาดไฟล์ 5MB
+            if (file.size > 5 * 1024 * 1024) {
                 alert('ไฟล์ต้องมีขนาดไม่เกิน 5MB ครับ');
                 event.target.value = '';
                 return;
@@ -1427,31 +1063,12 @@
             if(!name || !desc) { alert("กรุณากรอกชื่อและรายละเอียดผลิตภัณฑ์ให้ครบถ้วน"); return; }
             
             const present = document.getElementById('prod-present-base64').value || document.getElementById('prod-present-url').value.trim() || 'javascript:void(0);';
-            const demo = document.getElementById('prod-demo-base64').value || document.getElementById('prod-demo-url').value.trim() || 'javascript:void(0);';
-            const price = document.getElementById('prod-price-base64').value || document.getElementById('prod-price-url').value.trim() || 'javascript:void(0);';
-            const poster = document.getElementById('prod-poster-base64').value || document.getElementById('prod-poster-url').value.trim() || 'javascript:void(0);';
-            
-            const icons = ['fa-laptop-code', 'fa-server', 'fa-mobile-screen', 'fa-cloud', 'fa-cube'];
-            const randomIcon = icons[Math.floor(Math.random() * icons.length)];
-            
-            const newCard = document.createElement('div');
-            newCard.className = "bg-white rounded-xl shadow-sm p-6 border border-gray-100 hover:shadow-md transition flex flex-col fade-in";
-            newCard.innerHTML = `
-                <div class="w-12 h-12 bg-pastel-light text-pastel-dark rounded-lg flex items-center justify-center text-xl mb-4"><i class="fa-solid ${randomIcon}"></i></div>
-                <h3 class="font-bold text-lg mb-2">${name}</h3><p class="text-gray-600 text-sm mb-4 flex-1">${desc}</p>
-                <span class="text-xs font-bold text-white bg-pastel-dark px-2 py-1 rounded self-start mb-4">รับคอมมิชชั่นตามระดับสมาชิก</span>
-                <div class="grid grid-cols-2 gap-2 border-t border-gray-100 pt-4 mt-auto">
-                    <a href="${present}" target="${present !== 'javascript:void(0);' ? '_blank' : '_self'}" class="flex items-center justify-center text-xs text-blue-600 bg-blue-50 hover:bg-blue-100 px-2 py-2 rounded transition"><i class="fa-solid fa-file-powerpoint mr-1.5"></i> Present</a>
-                    <a href="${demo}" target="${demo !== 'javascript:void(0);' ? '_blank' : '_self'}" class="flex items-center justify-center text-xs text-purple-600 bg-purple-50 hover:bg-purple-100 px-2 py-2 rounded transition"><i class="fa-solid fa-play-circle mr-1.5"></i> Demo</a>
-                    <a href="${price}" target="${price !== 'javascript:void(0);' ? '_blank' : '_self'}" class="flex items-center justify-center text-xs text-green-600 bg-green-50 hover:bg-green-100 px-2 py-2 rounded transition"><i class="fa-solid fa-tags mr-1.5"></i> ราคาแพคเกจ</a>
-                    <a href="${poster}" target="${poster !== 'javascript:void(0);' ? '_blank' : '_self'}" class="flex items-center justify-center text-xs text-orange-600 bg-orange-50 hover:bg-orange-100 px-2 py-2 rounded transition"><i class="fa-solid fa-image mr-1.5"></i> โปสเตอร์</a>
-                </div>`;
-            document.getElementById('product-list').appendChild(newCard);
+            alert("บันทึกผลิตภัณฑ์สำเร็จ");
             closeAddProductModal();
         }
 
         // ==========================================
-        // ฟังก์ชันสำหรับโมดูลลูกค้าของฉัน
+        // การจัดการลูกค้าของฉัน
         // ==========================================
         function openAddCustomerModal() {
             document.getElementById('modal-add-customer').classList.remove('hidden-view');
@@ -1515,48 +1132,7 @@
         }
 
         // ==========================================
-        // ฟังก์ชันสำหรับตั้งค่าแพคเกจราคา
-        // ==========================================
-        function filterPackages() {
-            const selectedProduct = document.getElementById('package-product-selector').value;
-            const rows = document.querySelectorAll('.package-row');
-            rows.forEach(row => {
-                if(row.getAttribute('data-product') === selectedProduct) {
-                    row.classList.remove('hidden');
-                } else {
-                    row.classList.add('hidden');
-                }
-            });
-        }
-
-        function addPackageRow() {
-            const selectedProduct = document.getElementById('package-product-selector').value;
-            const tbody = document.getElementById('package-list-body');
-            
-            // นับแถวปัจจุบันเพื่อใส่ลำดับเริ่มต้น
-            const visibleRows = Array.from(tbody.querySelectorAll('.package-row')).filter(r => r.getAttribute('data-product') === selectedProduct);
-            const nextSeq = visibleRows.length + 1;
-
-            const tr = document.createElement('tr');
-            tr.className = "border-b hover:bg-gray-50 package-row fade-in";
-            tr.setAttribute('data-product', selectedProduct);
-            tr.innerHTML = `
-                <td class="px-4 py-3 text-center"><input type="number" value="${nextSeq}" class="w-16 px-2 py-1 border border-gray-200 rounded focus:ring-1 focus:ring-pastel outline-none text-center"></td>
-                <td class="px-4 py-3">
-                    <div class="flex items-center justify-center gap-2">
-                        <input type="number" value="" placeholder="เริ่มต้น" class="w-24 px-2 py-1 border border-gray-200 rounded focus:ring-1 focus:ring-pastel outline-none text-center">
-                        <span class="text-gray-400">ถึง</span>
-                        <input type="number" value="" placeholder="สูงสุด" class="w-24 px-2 py-1 border border-gray-200 rounded focus:ring-1 focus:ring-pastel outline-none text-center">
-                    </div>
-                </td>
-                <td class="px-4 py-3 text-right"><input type="number" value="" class="w-full max-w-[120px] px-2 py-1 border border-gray-200 rounded focus:ring-1 focus:ring-pastel outline-none text-right ml-auto"></td>
-                <td class="px-4 py-3 text-center"><button class="text-gray-400 hover:text-red-500" title="ลบรายการนี้" onclick="this.closest('tr').remove()"><i class="fa-solid fa-trash"></i></button></td>
-            `;
-            tbody.appendChild(tr);
-        }
-
-        // ==========================================
-        // ฟังก์ชันสำหรับใบเสร็จชั่วคราว
+        // การจัดการใบเสร็จรับเงิน
         // ==========================================
         function saveSharedReceipt(btn) {
             const receiptData = {
@@ -1592,6 +1168,305 @@
             }
         }
 
+        // ==========================================
+        // เชื่อมต่อ Backend (GAS) - เข้าสู่ระบบ/สมัครสมาชิก/ข้อมูลผู้ใช้
+        // ==========================================
+        function callBackend(funcName, ...args) {
+            return new Promise((resolve, reject) => {
+                if (typeof google !== 'undefined' && google.script && google.script.run) {
+                    const runner = google.script.run
+                        .withSuccessHandler(resolve)
+                        .withFailureHandler(reject);
+                    
+                    if (funcName === 'registerAgent') runner.registerAgent(args[0], args[1]);
+                    else if (funcName === 'loginAgent') runner.loginAgent(args[0], args[1], args[2]);
+                    else if (funcName === 'getAdminDashboardData') runner.getAdminDashboardData(args[0]);
+                    else if (funcName === 'approveAgent') runner.approveAgent(args[0], args[1]);
+                    else if (funcName === 'rejectAgent') runner.rejectAgent(args[0], args[1]);
+                } else {
+                    // โหมดจำลองสำหรับหน้า GitHub Pages หรือเปิดในคอม
+                    if(funcName === 'registerAgent') {
+                        alert("⚠️ คำเตือน: คุณกำลังเปิดไฟล์ HTML โดยตรง ไม่ได้เปิดผ่านลิงก์ของ Google Apps Script!\n\nระบบจะทำงานใน 'โหมดจำลอง' ข้อมูลจะไม่ถูกบันทึกลง Google Sheets ครับ");
+                    }
+                    setTimeout(() => {
+                        if (funcName === 'registerAgent') {
+                            const year = new Date().getFullYear();
+                            const randNum = Math.floor(Math.random()*100).toString().padStart(3,'0');
+                            resolve({ success: true, id: `pc-${year}-${randNum}`, message: "ลงทะเบียนสำเร็จ รอแอดมินอนุมัติ" });
+                        } else if (funcName === 'loginAgent') {
+                            const user = args[0];
+                            const pass = args[1];
+                            if (user === "admin" && pass === "bosskim") {
+                                resolve({ success: true, data: { id: "SUPER-ADMIN", name: "Boss Kim", level: "Super Admin", email: "admin@pixcel.com" }});
+                            } else {
+                                resolve({ success: true, data: { id: "pc-2026-001", name: "ทดสอบ ตัวแทน", level: "Starter", email: user, address: "123 กทม.", phone: "0801234567", salesThisMonth: 5500, sales: 15000 }});
+                            }
+                        } else if (funcName === 'getAdminDashboardData') {
+                            resolve({
+                                success: true, 
+                                users: [
+                                    { id: 'pc-2026-002', name: 'นายทดสอบ รออนุมัติ', status: 'Pending', email: 'test@mail.com', phone: '0811111111' },
+                                    { id: 'pc-2026-001', name: 'ทดสอบ ตัวแทนจำหน่าย', status: 'Approved', email: 'demo@mail.com', phone: '0822222222' }
+                                ]
+                            });
+                        } else if (funcName === 'approveAgent' || funcName === 'rejectAgent') {
+                            resolve({ success: true });
+                        }
+                    }, 800);
+                }
+            });
+        }
+
+        async function handleLogin() {
+            const user = document.getElementById('login-username').value.trim();
+            const pass = document.getElementById('login-password').value.trim();
+
+            if(!user || !pass) {
+                alert("กรุณากรอก Username และ Password ให้ครบถ้วน");
+                return;
+            }
+            
+            const btn = document.getElementById('btn-login');
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> กำลังเข้าสู่ระบบ...';
+            btn.disabled = true;
+
+            const sheetId = localStorage.getItem('pixcel_sheet_id') || '';
+
+            try {
+                const result = await callBackend('loginAgent', user, pass, sheetId);
+                if(result && result.success) {
+                    const d = result.data;
+                    document.getElementById('dash-username').innerText = d.name.split(' ')[0];
+                    document.getElementById('profile-id').innerText = d.id;
+                    document.getElementById('profile-name').innerText = d.name;
+                    
+                    document.getElementById('profile-address').innerText = (d.address && d.address !== "undefined") ? d.address : '-';
+                    document.getElementById('profile-phone').innerText = (d.phone && d.phone !== "undefined") ? d.phone : '-';
+                    document.getElementById('profile-email').innerText = (d.email && d.email !== "undefined") ? d.email : '-';
+
+                    let commRate = 0.10; 
+                    if (d.level === 'Silver') commRate = 0.15;
+                    if (d.level === 'Gold') commRate = 0.20;
+                    if (d.level === 'VIP') commRate = 0.25;
+                    
+                    if (d.level === "Super Admin") {
+                        document.getElementById('dash-level').className = "inline-block mt-1 px-3 py-1 bg-red-100 text-red-600 rounded-full text-xs font-bold";
+                        document.getElementById('dash-level').innerText = "Super Admin";
+                        
+                        document.getElementById('profile-level').innerHTML = `<i class="fa-solid fa-crown"></i> Super Admin`;
+                        document.getElementById('profile-level').className = "font-bold text-lg text-red-600";
+                        
+                        document.getElementById('menu-settings').classList.remove('hidden');
+                        
+                        document.getElementById('profile-sales-dashboard').classList.add('hidden');
+                        
+                        loadAdminData(); 
+                    } else {
+                        document.getElementById('dash-level').className = "inline-block mt-1 px-3 py-1 bg-pastel-light text-pastel-dark rounded-full text-xs font-semibold";
+                        document.getElementById('dash-level').innerText = d.level;
+                        
+                        document.getElementById('profile-level').innerHTML = `<i class="fa-solid fa-star"></i> ${d.level}`;
+                        document.getElementById('profile-level').className = "font-bold text-lg text-yellow-500";
+                        
+                        document.getElementById('menu-settings').classList.add('hidden');
+                        document.getElementById('floating-bell').classList.add('hidden');
+                        
+                        document.getElementById('profile-sales-dashboard').classList.remove('hidden');
+                        
+                        const salesMonth = d.salesThisMonth || 0;
+                        const commissionMonth = salesMonth * commRate;
+                        
+                        const formatSalesTotal = new Intl.NumberFormat('th-TH', { style: 'currency', currency: 'THB' }).format(d.sales || 0);
+                        const formatSalesMonth = new Intl.NumberFormat('th-TH', { style: 'currency', currency: 'THB' }).format(salesMonth);
+                        const formatCommission = new Intl.NumberFormat('th-TH', { style: 'currency', currency: 'THB' }).format(commissionMonth);
+                        
+                        document.getElementById('profile-sales-total').innerText = formatSalesTotal;
+                        document.getElementById('profile-sales-month').innerText = formatSalesMonth;
+                        document.getElementById('profile-commission-month').innerText = formatCommission;
+                        document.getElementById('profile-comm-rate').innerText = `Rate: ${commRate * 100}%`;
+                        
+                        const targetSilver = 50000;
+                        let progress = ((d.sales || 0) / targetSilver) * 100;
+                        if(progress > 100) progress = 100;
+                        setTimeout(() => { document.getElementById('profile-progress').style.width = progress + "%"; }, 300);
+                    }
+
+                    switchView('view-dashboard');
+                } else {
+                    alert("ข้อผิดพลาด: " + (result ? result.message : 'การเข้าสู่ระบบล้มเหลว'));
+                }
+            } catch (error) {
+                alert("เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์");
+            } finally {
+                btn.innerHTML = '<i class="fa-solid fa-right-to-bracket mr-2"></i> เข้าสู่ระบบ';
+                btn.disabled = false;
+            }
+        }
+
+        async function handleRegister() {
+            const nameInput = document.getElementById('reg-name').value.trim();
+            const addressInput = document.getElementById('reg-address').value.trim();
+            const phoneInput = document.getElementById('reg-phone').value.trim();
+            const emailInput = document.getElementById('reg-email').value.trim();
+
+            if(!nameInput || !addressInput || !phoneInput || !emailInput) {
+                alert("กรุณากรอกข้อมูลให้ครบถ้วนก่อนยืนยันการสมัคร");
+                return;
+            }
+
+            const btn = document.getElementById('btn-register');
+            const msgBox = document.getElementById('reg-message');
+            
+            msgBox.classList.add('hidden');
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> กำลังดำเนินการ...';
+            btn.disabled = true;
+
+            const data = { name: nameInput, address: addressInput, phone: phoneInput, email: emailInput };
+            const sheetId = localStorage.getItem('pixcel_sheet_id') || '';
+
+            try {
+                const result = await callBackend('registerAgent', data, sheetId);
+                if(result && result.success) {
+                    msgBox.className = "mt-4 text-center p-5 bg-green-50 text-green-800 rounded-lg border border-green-200 font-medium fade-in shadow-sm";
+                    const successText = result.message === "ลงทะเบียนสำเร็จ รอแอดมินอนุมัติ" ? "(ข้อมูลจำลอง)" : "";
+                    msgBox.innerHTML = `
+                        <i class="fa-solid fa-circle-check text-4xl mb-3 text-green-500"></i><br>
+                        <span class="text-lg font-bold">สมัครสมาชิกสำเร็จ! ${successText}</span><br>
+                        รหัสตัวแทนของคุณคือ: <b class="text-xl text-green-700">${result.id}</b><br>
+                        <span class="text-sm mt-3 block text-gray-600 bg-white p-2 rounded">โปรดรอ Admin ยืนยันระบบ</span>
+                    `;
+                    msgBox.classList.remove('hidden');
+                    clearInputs('form-register');
+                    btn.classList.add('hidden'); 
+                } else {
+                    alert("ข้อผิดพลาด: " + (result ? result.message : 'ไม่ทราบสาเหตุ'));
+                    btn.innerHTML = '<i class="fa-solid fa-user-plus mr-2"></i> ยืนยันการสมัคร';
+                    btn.disabled = false;
+                }
+            } catch (error) {
+                alert("การเชื่อมต่อล้มเหลว กรุณาลองใหม่อีกครั้ง");
+                btn.innerHTML = '<i class="fa-solid fa-user-plus mr-2"></i> ยืนยันการสมัคร';
+                btn.disabled = false;
+            }
+        }
+
+        async function loadAdminData() {
+            const sheetId = localStorage.getItem('pixcel_sheet_id') || '';
+            const tbody = document.getElementById('admin-user-list-body');
+            tbody.innerHTML = '<tr><td colspan="4" class="text-center py-4"><i class="fa-solid fa-spinner fa-spin text-pastel-dark"></i> กำลังโหลดข้อมูล...</td></tr>';
+            
+            try {
+                const result = await callBackend('getAdminDashboardData', sheetId);
+                if (result && result.success) {
+                    renderAdminUserTable(result.users || []);
+                } else {
+                    tbody.innerHTML = `<tr><td colspan="4" class="text-center py-4 text-red-500">${result ? result.message : 'โหลดข้อมูลล้มเหลว'}</td></tr>`;
+                }
+            } catch (e) {
+                tbody.innerHTML = '<tr><td colspan="4" class="text-center py-4 text-red-500">เกิดข้อผิดพลาดในการเชื่อมต่อ</td></tr>';
+            }
+        }
+
+        function renderAdminUserTable(users) {
+            const tbody = document.getElementById('admin-user-list-body');
+            tbody.innerHTML = '';
+            let pendingCount = 0;
+            
+            if (users.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" class="text-center py-4 text-gray-500">ยังไม่มีผู้ใช้งานในระบบ</td></tr>';
+            } else {
+                users.forEach(u => {
+                    if(u.id === "SUPER-ADMIN") return;
+                    if (u.status === 'Pending') pendingCount++;
+                    
+                    let statusBadge = u.status === 'Pending' ? 
+                        `<span class="bg-yellow-100 text-yellow-800 text-xs font-bold px-2 py-1 rounded">รออนุมัติ</span>` : 
+                        `<span class="bg-green-100 text-green-800 text-xs font-bold px-2 py-1 rounded">อนุมัติแล้ว</span>`;
+                    
+                    let actionBtns = u.status === 'Pending' ? `
+                        <button onclick="handleApprove('${u.id}')" class="text-white bg-pastel hover:bg-pastel-dark px-3 py-1 rounded text-xs font-bold transition shadow-sm mx-0.5">อนุมัติ</button>
+                        <button onclick="handleReject('${u.id}')" class="text-white bg-red-400 hover:bg-red-500 px-3 py-1 rounded text-xs font-bold transition shadow-sm mx-0.5">ปฏิเสธ</button>
+                    ` : `<span class="text-gray-400 text-xs">จัดการแล้ว</span>`;
+
+                    const tr = document.createElement('tr');
+                    tr.className = 'border-b hover:bg-gray-50';
+                    tr.innerHTML = `
+                        <td class="px-4 py-3 font-medium text-gray-900">${u.id}</td>
+                        <td class="px-4 py-3">
+                            <div class="font-bold text-gray-800">${u.name}</div>
+                            <div class="text-xs text-gray-500"><i class="fa-solid fa-envelope mr-1"></i>${u.email} <br><i class="fa-solid fa-phone mr-1"></i>${u.phone || '-'}</div>
+                        </td>
+                        <td class="px-4 py-3">${statusBadge}</td>
+                        <td class="px-4 py-3 text-center">${actionBtns}</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            }
+            
+            const navBadge = document.getElementById('nav-badge-pending');
+            const floatBell = document.getElementById('floating-bell');
+            const floatCount = document.getElementById('floating-badge-count');
+            
+            if (pendingCount > 0) {
+                navBadge.innerText = pendingCount;
+                navBadge.classList.remove('hidden');
+                floatCount.innerText = pendingCount;
+                floatBell.classList.remove('hidden');
+            } else {
+                navBadge.classList.add('hidden');
+                floatBell.classList.add('hidden');
+            }
+        }
+
+        async function handleApprove(id) {
+            if(!confirm(`ต้องการ 'อนุมัติ' ผู้ใช้งานรหัส ${id} ใช่หรือไม่?\n(ระบบจะสุ่มรหัสผ่านและส่งอีเมลแจ้งเตือนให้ผู้ใช้)`)) return;
+            const sheetId = localStorage.getItem('pixcel_sheet_id') || '';
+            try {
+                const res = await callBackend('approveAgent', id, sheetId);
+                if(res && res.success) { 
+                    if(res.emailError) {
+                        alert("✅ อนุมัติสำเร็จ! แต่ส่งอีเมลไม่ได้: " + res.emailError + "\n\n⚠️ กรุณาตั้งค่าสิทธิ์ Gmail ในหน้า Google Apps Script");
+                    } else {
+                        alert("✅ อนุมัติและส่งอีเมลแจ้งรหัสผ่านสำเร็จ!"); 
+                    }
+                    loadAdminData(); 
+                }
+                else { alert("❌ ผิดพลาด: " + res.message); }
+            } catch(e) { alert("ล้มเหลวในการเชื่อมต่อ"); }
+        }
+
+        async function handleReject(id) {
+            if(!confirm(`ต้องการ 'ปฏิเสธและลบ' ผู้ใช้งานรหัส ${id} ใช่หรือไม่?`)) return;
+            const sheetId = localStorage.getItem('pixcel_sheet_id') || '';
+            try {
+                const res = await callBackend('rejectAgent', id, sheetId);
+                if(res && res.success) { alert("ลบข้อมูลสำเร็จ!"); loadAdminData(); }
+                else { alert("ผิดพลาด: " + res.message); }
+            } catch(e) { alert("ล้มเหลว"); }
+        }
+
+        function bypassToDashboard() {
+            document.getElementById('dash-username').innerText = "Boss Kim";
+            document.getElementById('dash-level').className = "inline-block mt-1 px-3 py-1 bg-red-100 text-red-600 rounded-full text-xs font-bold";
+            document.getElementById('dash-level').innerText = "Super Admin";
+            
+            document.getElementById('profile-id').innerText = "SUPER-ADMIN";
+            document.getElementById('profile-name').innerText = "Boss Kim (ผู้บริหาร)";
+            document.getElementById('profile-level').innerHTML = `<i class="fa-solid fa-crown"></i> Super Admin`;
+            document.getElementById('profile-level').className = "font-bold text-lg text-red-600";
+            
+            document.getElementById('menu-settings').classList.remove('hidden');
+            
+            loadAdminData(); 
+            
+            switchView('view-dashboard');
+        }
+
+        function handleLogout() {
+            switchView('view-login');
+            switchTab('tab-profile', document.querySelector('.tab-btn'));
+            document.getElementById('floating-bell').classList.add('hidden');
+        }
     </script>
 </body>
 </html>
