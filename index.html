@@ -1,0 +1,1509 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <base target="_top">
+    <title>Pixcel Reseller Portal</title>
+    <!-- ใช้ Tailwind CSS สำหรับจัดรูปแบบหน้าเว็บ -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        pastel: {
+                            light: '#f1f8e9', 
+                            DEFAULT: '#aed581', 
+                            dark: '#7cb342',  
+                            text: '#33691e',  
+                            card: '#ffffff'   
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- ใช้ Font Awesome สำหรับไอคอน -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* ซ่อน Element ที่ไม่ได้ใช้งาน */
+        .hidden-view { display: none !important; }
+        .fade-in { animation: fadeIn 0.5s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body class="bg-pastel-light text-pastel-text font-sans antialiased h-screen overflow-hidden flex items-center justify-center">
+
+    <!-- ==================== VIEW: LOGIN (หน้าแรก) ==================== -->
+    <div id="view-login" class="w-full max-w-md p-6 fade-in">
+        <div class="bg-pastel-card rounded-2xl shadow-xl border border-pastel p-8">
+            <div class="text-center mb-6">
+                <i class="fa-solid fa-cube text-5xl text-pastel-dark mb-3"></i>
+                <h2 class="text-2xl font-bold text-gray-800">เข้าสู่ระบบ</h2>
+                <p class="text-gray-500 text-sm">Pixcel Reseller Portal</p>
+            </div>
+            
+            <div id="login-container">
+                <div class="mb-4">
+                    <label class="block text-sm font-semibold mb-1">Username (Email หรือ ID)</label>
+                    <input type="text" id="login-username" placeholder="กรอก Email หรือ ID" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pastel outline-none">
+                </div>
+                <div class="mb-6">
+                    <label class="block text-sm font-semibold mb-1">Password</label>
+                    <!-- กด Enter เพื่อ Login -->
+                    <input type="password" id="login-password" placeholder="กรอกรหัสผ่าน" onkeydown="if(event.key === 'Enter') handleLogin()" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pastel outline-none">
+                </div>
+                <button type="button" onclick="handleLogin()" id="btn-login" class="w-full bg-pastel hover:bg-pastel-dark text-white font-bold py-3 rounded-lg transition duration-300 flex justify-center items-center shadow-md">
+                    <i class="fa-solid fa-right-to-bracket mr-2"></i> เข้าสู่ระบบ
+                </button>
+                
+                <!-- ปุ่มลัดเข้า Dashboard (สำหรับทดสอบโดยไม่ต้องใช้ฐานข้อมูลจริง) -->
+                <button type="button" onclick="bypassToDashboard()" class="w-full mt-3 bg-gray-100 hover:bg-gray-200 text-gray-600 font-bold py-2 rounded-lg transition duration-300 border border-gray-200 text-sm">
+                    <i class="fa-solid fa-gauge mr-1"></i> เข้าสู่ Dashboard (โหมดทดสอบ)
+                </button>
+            </div>
+
+            <div class="mt-6 pt-4 border-t border-gray-100 text-center text-sm">
+                <p class="text-gray-600 mb-2">ยังไม่ได้เป็นตัวแทนจำหน่าย?</p>
+                <button type="button" onclick="switchView('view-register')" class="w-full bg-white border-2 border-pastel text-pastel-dark font-bold py-2 rounded-lg hover:bg-pastel-light transition duration-300">
+                    สมัครสมาชิกใหม่
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== VIEW: REGISTER ==================== -->
+    <div id="view-register" class="w-full max-w-lg p-6 hidden-view fade-in">
+        <div class="bg-pastel-card rounded-2xl shadow-xl border border-pastel p-8">
+            <h2 class="text-2xl font-bold text-center mb-6 text-pastel-dark">สมัครตัวแทนจำหน่าย Pixcel</h2>
+            
+            <div id="form-register">
+                <div class="grid grid-cols-1 gap-4">
+                    <div>
+                        <label class="block text-sm font-semibold mb-1">ชื่อ - นามสกุล <span class="text-red-500">*</span></label>
+                        <input type="text" id="reg-name" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pastel outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold mb-1">ที่อยู่ <span class="text-red-500">*</span></label>
+                        <textarea id="reg-address" rows="2" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pastel outline-none"></textarea>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-semibold mb-1">เบอร์โทรติดต่อ <span class="text-red-500">*</span></label>
+                            <input type="tel" id="reg-phone" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pastel outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold mb-1">E-mail <span class="text-red-500">*</span></label>
+                            <input type="email" id="reg-email" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pastel outline-none">
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="reg-message" class="mt-4 text-center hidden p-3 rounded-lg"></div>
+
+                <div class="mt-6 flex flex-col gap-3">
+                    <button type="button" onclick="handleRegister()" id="btn-register" class="w-full bg-pastel hover:bg-pastel-dark text-white font-bold py-3 rounded-lg transition duration-300 flex justify-center items-center shadow-md">
+                        <i class="fa-solid fa-user-plus mr-2"></i> ยืนยันการสมัคร
+                    </button>
+                    <!-- ปุ่มกลับไปหน้า Login -->
+                    <button type="button" onclick="switchView('view-login')" class="w-full bg-gray-100 hover:bg-gray-200 text-gray-600 font-bold py-3 rounded-lg transition duration-300 border border-gray-200">
+                        <i class="fa-solid fa-arrow-left mr-2"></i> กลับไปหน้าเข้าสู่ระบบ
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== VIEW: DASHBOARD ==================== -->
+    <div id="view-dashboard" class="w-full h-full hidden-view flex flex-col md:flex-row bg-gray-50">
+        <!-- Sidebar -->
+        <div class="w-full md:w-64 bg-pastel-card border-r border-gray-200 shadow-sm flex flex-col">
+            <div class="p-6 text-center border-b border-gray-100">
+                <div class="relative w-16 h-16 mx-auto mb-3">
+                    <img id="sidebar-avatar" src="https://ui-avatars.com/api/?name=Admin&background=aed581&color=fff" class="w-16 h-16 rounded-full object-cover shadow-inner border-2 border-white bg-pastel-light" alt="User Avatar">
+                </div>
+                <h3 id="dash-username" class="font-bold text-lg">ชื่อผู้ใช้</h3>
+                <span id="dash-level" class="inline-block mt-1 px-3 py-1 bg-pastel-light text-pastel-dark rounded-full text-xs font-semibold">Starter Level</span>
+            </div>
+            <nav class="flex-1 p-4">
+                <ul class="space-y-2">
+                    <li>
+                        <a href="javascript:void(0);" onclick="switchTab('tab-profile', this)" class="tab-btn flex items-center px-4 py-3 bg-pastel text-white rounded-lg transition-colors font-medium">
+                            <i class="fa-solid fa-address-card w-6"></i> ข้อมูลสมาชิก
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0);" onclick="switchTab('tab-customers', this)" class="tab-btn flex items-center px-4 py-3 text-gray-600 hover:bg-pastel-light hover:text-pastel-dark rounded-lg transition-colors font-medium">
+                            <i class="fa-solid fa-users w-6"></i> ลูกค้าของฉัน
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0);" onclick="switchTab('tab-products', this)" class="tab-btn flex items-center px-4 py-3 text-gray-600 hover:bg-pastel-light hover:text-pastel-dark rounded-lg transition-colors font-medium">
+                            <i class="fa-solid fa-box-open w-6"></i> เกี่ยวกับผลิตภัณฑ์
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0);" onclick="switchTab('tab-quotation', this)" class="tab-btn flex items-center px-4 py-3 text-gray-600 hover:bg-pastel-light hover:text-pastel-dark rounded-lg transition-colors font-medium">
+                            <i class="fa-solid fa-file-invoice-dollar w-6"></i> สร้างใบเสนอราคา
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0);" onclick="switchTab('tab-receipt', this)" class="tab-btn flex items-center px-4 py-3 text-gray-600 hover:bg-pastel-light hover:text-pastel-dark rounded-lg transition-colors font-medium">
+                            <i class="fa-solid fa-receipt w-6"></i> ใบเสร็จรับเงิน (ชั่วคราว)
+                        </a>
+                    </li>
+                    <li id="menu-settings" class="hidden">
+                        <a href="javascript:void(0);" onclick="switchTab('tab-settings', this)" class="tab-btn flex items-center px-4 py-3 text-red-500 hover:bg-red-50 rounded-lg transition-colors font-medium">
+                            <i class="fa-solid fa-gear w-6"></i> ตั้งค่าระบบ
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            <div class="p-4 border-t border-gray-100">
+                <button onclick="handleLogout()" class="w-full flex items-center justify-center px-4 py-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors font-semibold">
+                    <i class="fa-solid fa-sign-out-alt mr-2"></i> ออกจากระบบ
+                </button>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex-1 overflow-y-auto p-6 md:p-10 bg-pastel-light">
+            
+            <!-- Tab: Profile -->
+            <div id="tab-profile" class="tab-content fade-in">
+                <h2 class="text-2xl font-bold mb-6 border-b-2 border-pastel pb-2 inline-block">ข้อมูลสมาชิกของคุณ</h2>
+                <div class="bg-white rounded-xl shadow-sm p-6 max-w-4xl border border-gray-100">
+                    
+                    <!-- ส่วนรูปโปรไฟล์ -->
+                    <div class="flex flex-col sm:flex-row items-center gap-6 mb-6 pb-6 border-b border-gray-100">
+                        <div class="relative group">
+                            <img id="profile-avatar" src="https://ui-avatars.com/api/?name=Admin&background=aed581&color=fff" class="w-24 h-24 rounded-full object-cover border-4 border-pastel-light shadow-md bg-pastel-light" alt="Profile Avatar">
+                            <label for="upload-avatar" class="absolute bottom-0 right-0 bg-pastel text-white w-8 h-8 rounded-full flex items-center justify-center cursor-pointer hover:bg-pastel-dark transition shadow-lg" title="เปลี่ยนรูปโปรไฟล์">
+                                <i class="fa-solid fa-camera text-sm"></i>
+                            </label>
+                            <input type="file" id="upload-avatar" accept="image/*" class="hidden" onchange="handleAvatarUpload(event)">
+                        </div>
+                        <div class="text-center sm:text-left">
+                            <h3 id="profile-display-name" class="text-xl font-bold text-gray-800">-</h3>
+                            <p class="text-gray-500 text-sm mt-1">อัปโหลดรูปภาพโปรไฟล์ของคุณ</p>
+                            <p class="text-gray-400 text-xs mt-1">รองรับไฟล์ JPG, PNG ขนาดไม่เกิน 2MB</p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <p class="text-sm text-gray-500 mb-1">รหัสตัวแทนจำหน่าย (ID)</p>
+                            <p id="profile-id" class="font-bold text-lg text-pastel-dark">-</p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-500 mb-1">ระดับสมาชิก (Level)</p>
+                            <p id="profile-level" class="font-bold text-lg text-yellow-500"><i class="fa-solid fa-star"></i> Starter</p>
+                        </div>
+                        
+                        <!-- ส่วน Dashboard ยอดขาย และ คอมมิชชั่น -->
+                        <div id="profile-sales-dashboard" class="md:col-span-2 flex flex-col gap-4 mb-2">
+                            <!-- เพิ่ม grid เป็น 3 คอลัมน์ -->
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <!-- ยอดขายเดือนนี้ -->
+                                <div class="bg-blue-50 p-5 rounded-xl border border-blue-100 shadow-sm flex flex-col justify-center items-center text-center">
+                                    <p class="text-sm text-blue-600 font-bold mb-1"><i class="fa-solid fa-calendar-day mr-1"></i> ยอดขายเดือนนี้</p>
+                                    <p id="profile-sales-month" class="font-bold text-2xl lg:text-3xl text-blue-700">฿ 0.00</p>
+                                </div>
+                                <!-- ค่าคอมมิชชั่นที่ได้รับ -->
+                                <div class="bg-purple-50 p-5 rounded-xl border border-purple-100 shadow-sm flex flex-col justify-center items-center text-center relative overflow-hidden">
+                                    <div class="absolute top-0 right-0 bg-purple-200 text-purple-700 text-[10px] font-bold px-2 py-1 rounded-bl-lg" id="profile-comm-rate">Rate: 10%</div>
+                                    <p class="text-sm text-purple-600 font-bold mb-1"><i class="fa-solid fa-hand-holding-dollar mr-1"></i> คอมมิชชั่นเดือนนี้</p>
+                                    <p id="profile-commission-month" class="font-bold text-2xl lg:text-3xl text-purple-700">฿ 0.00</p>
+                                </div>
+                                <!-- ยอดขายสะสม -->
+                                <div class="bg-green-50 p-5 rounded-xl border border-green-100 shadow-sm flex flex-col justify-center items-center text-center">
+                                    <p class="text-sm text-green-600 font-bold mb-1"><i class="fa-solid fa-chart-line mr-1"></i> ยอดขายสะสมทั้งหมด</p>
+                                    <p id="profile-sales-total" class="font-bold text-2xl lg:text-3xl text-green-700">฿ 0.00</p>
+                                </div>
+                            </div>
+                            <!-- หลอดพลัง -->
+                            <div class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm">
+                                <div class="flex justify-between items-end mb-2">
+                                    <p class="text-sm text-gray-600 font-bold">ความคืบหน้าสู่ระดับถัดไป</p>
+                                    <p id="profile-next-level" class="text-xs text-gray-500">ยอดขายอีก ฿ 35,000.00 เพื่อเป็น <span class="font-bold text-blue-600">Silver</span></p>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-3">
+                                    <div id="profile-progress" class="bg-pastel h-3 rounded-full transition-all duration-1000" style="width: 0%"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="md:col-span-2 mt-4">
+                            <p class="text-sm text-gray-500 mb-1">ชื่อ - นามสกุล</p>
+                            <p id="profile-name" class="font-semibold text-gray-800">-</p>
+                        </div>
+                        <div class="md:col-span-2">
+                            <p class="text-sm text-gray-500 mb-1">ที่อยู่</p>
+                            <p id="profile-address" class="font-semibold text-gray-800">-</p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-500 mb-1">เบอร์โทรติดต่อ</p>
+                            <p id="profile-phone" class="font-semibold text-gray-800">-</p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-500 mb-1">E-mail</p>
+                            <p id="profile-email" class="font-semibold text-gray-800">-</p>
+                        </div>
+
+                        <!-- ข้อมูลบัญชีรับเงินค่าคอมมิชชั่น -->
+                        <div class="md:col-span-2 mt-4 pt-6 border-t border-gray-100">
+                            <h3 class="font-bold text-lg mb-4 text-gray-800"><i class="fa-solid fa-money-check-dollar text-pastel-dark mr-2"></i>บัญชีรับเงินค่าคอมมิชชั่น</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-semibold mb-1 text-gray-600">ธนาคาร</label>
+                                    <div class="flex items-center gap-3">
+                                        <img id="bank-logo-preview" src="https://ui-avatars.com/api/?name=B&background=e2e8f0&color=94a3b8" class="w-10 h-10 rounded-full object-cover border-2 border-gray-200 shadow-sm transition-all duration-300" alt="Bank Logo">
+                                        <select id="profile-bank" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pastel outline-none bg-white cursor-pointer" onchange="updateBankLogo()">
+                                            <option value="" data-logo="https://ui-avatars.com/api/?name=B&background=e2e8f0&color=94a3b8" disabled selected>-- เลือกธนาคาร --</option>
+                                            <option value="kbank" data-logo="https://ui-avatars.com/api/?name=K&background=10C176&color=fff&font-size=0.6">ธนาคารกสิกรไทย (KBANK)</option>
+                                            <option value="scb" data-logo="https://ui-avatars.com/api/?name=S&background=4E2A81&color=fff&font-size=0.6">ธนาคารไทยพาณิชย์ (SCB)</option>
+                                            <option value="bbl" data-logo="https://ui-avatars.com/api/?name=B&background=1E4598&color=fff&font-size=0.6">ธนาคารกรุงเทพ (BBL)</option>
+                                            <option value="ktb" data-logo="https://ui-avatars.com/api/?name=K&background=00AEEF&color=fff&font-size=0.6">ธนาคารกรุงไทย (KTB)</option>
+                                            <option value="ttb" data-logo="https://ui-avatars.com/api/?name=T&background=0050f0&color=fff&font-size=0.6">ธนาคารทหารไทยธนชาต (TTB)</option>
+                                            <option value="bay" data-logo="https://ui-avatars.com/api/?name=B&background=F7C800&color=fff&font-size=0.6">ธนาคารกรศรีอยุธยา (BAY)</option>
+                                            <option value="gsb" data-logo="https://ui-avatars.com/api/?name=G&background=EB198D&color=fff&font-size=0.6">ธนาคารออมสิน (GSB)</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-semibold mb-1 text-gray-600">เลขที่บัญชี</label>
+                                    <input type="text" id="profile-bank-account" placeholder="เช่น 123-4-56789-0" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pastel outline-none">
+                                </div>
+                                <div class="md:col-span-2">
+                                    <label class="block text-sm font-semibold mb-1 text-gray-600">ชื่อบัญชี</label>
+                                    <input type="text" id="profile-bank-name" placeholder="ชื่อ-นามสกุล ตรงตามสมุดบัญชี" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pastel outline-none">
+                                </div>
+                                <div class="md:col-span-2 flex justify-end mt-2">
+                                    <button class="bg-pastel hover:bg-pastel-dark text-white font-bold py-2 px-6 rounded-lg transition duration-300 shadow-md flex items-center">
+                                        <i class="fa-solid fa-save mr-2"></i> บันทึกข้อมูลบัญชี
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab: Customers (ลูกค้าของฉัน) -->
+            <div id="tab-customers" class="tab-content hidden-view fade-in">
+                <div class="flex flex-wrap justify-between items-center mb-6 border-b-2 border-pastel pb-2 max-w-5xl">
+                    <h2 class="text-2xl font-bold">รายชื่อลูกค้าของฉัน</h2>
+                    <button onclick="openAddCustomerModal()" class="bg-pastel hover:bg-pastel-dark text-white font-bold py-2 px-4 rounded-lg transition duration-300 text-sm shadow-sm flex items-center">
+                        <i class="fa-solid fa-plus mr-2"></i> เพิ่มลูกค้าใหม่
+                    </button>
+                </div>
+                
+                <div class="bg-white rounded-xl shadow-sm p-6 max-w-5xl border border-gray-100">
+                    <p class="text-gray-500 text-sm mb-4"><i class="fa-solid fa-circle-info text-pastel-dark mr-1"></i> รายชื่อลูกค้าและหน่วยงานโครงการที่คุณได้ทำการเสนอขายหรือดูแลอยู่</p>
+                    
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm text-left text-gray-500">
+                            <thead class="text-xs text-gray-700 uppercase bg-pastel-light">
+                                <tr>
+                                    <th class="px-4 py-3 rounded-tl-lg">รหัสลูกค้า</th>
+                                    <th class="px-4 py-3">ชื่อบริษัท / โครงการ</th>
+                                    <th class="px-4 py-3">ผู้ติดต่อ</th>
+                                    <th class="px-4 py-3 text-center">จำนวน (ยูนิต)</th>
+                                    <th class="px-4 py-3 text-right">ค่าบริการ/เดือน</th>
+                                    <th class="px-4 py-3 rounded-tr-lg text-center">จัดการ</th>
+                                </tr>
+                            </thead>
+                            <tbody id="customer-list-body">
+                                <!-- ข้อมูลจำลอง -->
+                                <tr class="border-b hover:bg-gray-50">
+                                    <td class="px-4 py-3 font-medium text-gray-900">CUST-001</td>
+                                    <td class="px-4 py-3">
+                                        <div class="font-bold text-gray-800">บจก. ตัวอย่าง พร็อพเพอร์ตี้</div>
+                                        <div class="text-xs text-gray-500">โครงการ: คอนโดสุขใจ แบงค็อก</div>
+                                    </td>
+                                    <td class="px-4 py-3">
+                                        <div>คุณสมชาย ใจดี</div>
+                                        <div class="text-xs text-gray-500">080-123-4567</div>
+                                    </td>
+                                    <td class="px-4 py-3 text-center"><span class="bg-blue-100 text-blue-800 text-xs font-bold px-2 py-1 rounded">100 ห้อง</span></td>
+                                    <td class="px-4 py-3 text-right font-bold text-green-600">฿ 3,000.00</td>
+                                    <td class="px-4 py-3 text-center">
+                                        <button class="text-blue-500 hover:text-blue-700 mx-1" title="แก้ไขข้อมูล"><i class="fa-solid fa-pen-to-square"></i></button>
+                                        <button class="text-red-500 hover:text-red-700 mx-1" title="ลบ"><i class="fa-solid fa-trash"></i></button>
+                                    </td>
+                                </tr>
+                                <tr class="border-b hover:bg-gray-50">
+                                    <td class="px-4 py-3 font-medium text-gray-900">CUST-002</td>
+                                    <td class="px-4 py-3">
+                                        <div class="font-bold text-gray-800">หมู่บ้าน แฮปปี้โฮม</div>
+                                        <div class="text-xs text-gray-500">โครงการ: เฟส 2</div>
+                                    </td>
+                                    <td class="px-4 py-3">
+                                        <div>นิติบุคคล</div>
+                                        <div class="text-xs text-gray-500">02-987-6543</div>
+                                    </td>
+                                    <td class="px-4 py-3 text-center"><span class="bg-purple-100 text-purple-800 text-xs font-bold px-2 py-1 rounded">50 หลัง</span></td>
+                                    <td class="px-4 py-3 text-right font-bold text-green-600">฿ 1,500.00</td>
+                                    <td class="px-4 py-3 text-center">
+                                        <button class="text-blue-500 hover:text-blue-700 mx-1" title="แก้ไขข้อมูล"><i class="fa-solid fa-pen-to-square"></i></button>
+                                        <button class="text-red-500 hover:text-red-700 mx-1" title="ลบ"><i class="fa-solid fa-trash"></i></button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab: Products -->
+            <div id="tab-products" class="tab-content hidden-view fade-in">
+                <div class="flex flex-wrap justify-between items-center mb-6 border-b-2 border-pastel pb-2 max-w-4xl">
+                    <h2 class="text-2xl font-bold">ผลิตภัณฑ์ Software Pixcel</h2>
+                    <button id="btn-add-product" onclick="openAddProductModal()" class="hidden bg-pastel hover:bg-pastel-dark text-white font-bold py-2 px-4 rounded-lg transition duration-300 text-sm shadow-sm flex items-center">
+                        <i class="fa-solid fa-plus mr-2"></i> เพิ่มผลิตภัณฑ์
+                    </button>
+                </div>
+                <div id="product-list" class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl">
+                    <!-- การ์ดที่ 1 -->
+                    <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100 hover:shadow-md transition flex flex-col">
+                        <div class="w-12 h-12 bg-pastel-light text-pastel-dark rounded-lg flex items-center justify-center text-xl mb-4">
+                            <i class="fa-solid fa-cash-register"></i>
+                        </div>
+                        <h3 class="font-bold text-lg mb-2">Pixcel POS System</h3>
+                        <p class="text-gray-600 text-sm mb-4 flex-1">ระบบจัดการหน้าร้าน ยอดขาย สต็อกสินค้า เหมาะสำหรับร้านค้าปลีก ใช้งานง่ายผ่าน Cloud</p>
+                        <span class="text-xs font-bold text-white bg-pastel-dark px-2 py-1 rounded self-start mb-4">รับคอมมิชชั่นตามระดับสมาชิก</span>
+                        
+                        <div class="grid grid-cols-2 gap-2 border-t border-gray-100 pt-4 mt-auto">
+                            <a href="javascript:void(0);" class="flex items-center justify-center text-xs text-blue-600 bg-blue-50 hover:bg-blue-100 px-2 py-2 rounded transition">
+                                <i class="fa-solid fa-file-powerpoint mr-1.5"></i> Present
+                            </a>
+                            <a href="javascript:void(0);" class="flex items-center justify-center text-xs text-purple-600 bg-purple-50 hover:bg-purple-100 px-2 py-2 rounded transition">
+                                <i class="fa-solid fa-play-circle mr-1.5"></i> Demo
+                            </a>
+                            <a href="javascript:void(0);" class="flex items-center justify-center text-xs text-green-600 bg-green-50 hover:bg-green-100 px-2 py-2 rounded transition">
+                                <i class="fa-solid fa-tags mr-1.5"></i> ราคาแพคเกจ
+                            </a>
+                            <a href="javascript:void(0);" class="flex items-center justify-center text-xs text-orange-600 bg-orange-50 hover:bg-orange-100 px-2 py-2 rounded transition">
+                                <i class="fa-solid fa-image mr-1.5"></i> โปสเตอร์
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <!-- การ์ดที่ 2 -->
+                    <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100 hover:shadow-md transition flex flex-col">
+                        <div class="w-12 h-12 bg-pastel-light text-pastel-dark rounded-lg flex items-center justify-center text-xl mb-4">
+                            <i class="fa-solid fa-chart-line"></i>
+                        </div>
+                        <h3 class="font-bold text-lg mb-2">Pixcel CRM & ERP</h3>
+                        <p class="text-gray-600 text-sm mb-4 flex-1">ระบบจัดการความสัมพันธ์ลูกค้าและบริหารองค์กร ครบจบในระบบเดียว สำหรับองค์กรขนาดกลาง</p>
+                        <span class="text-xs font-bold text-white bg-pastel-dark px-2 py-1 rounded self-start mb-4">รับคอมมิชชั่นตามระดับสมาชิก</span>
+                        
+                        <div class="grid grid-cols-2 gap-2 border-t border-gray-100 pt-4 mt-auto">
+                            <a href="javascript:void(0);" class="flex items-center justify-center text-xs text-blue-600 bg-blue-50 hover:bg-blue-100 px-2 py-2 rounded transition">
+                                <i class="fa-solid fa-file-powerpoint mr-1.5"></i> Present
+                            </a>
+                            <a href="javascript:void(0);" class="flex items-center justify-center text-xs text-purple-600 bg-purple-50 hover:bg-purple-100 px-2 py-2 rounded transition">
+                                <i class="fa-solid fa-play-circle mr-1.5"></i> Demo
+                            </a>
+                            <a href="javascript:void(0);" class="flex items-center justify-center text-xs text-green-600 bg-green-50 hover:bg-green-100 px-2 py-2 rounded transition">
+                                <i class="fa-solid fa-tags mr-1.5"></i> ราคาแพคเกจ
+                            </a>
+                            <a href="javascript:void(0);" class="flex items-center justify-center text-xs text-orange-600 bg-orange-50 hover:bg-orange-100 px-2 py-2 rounded transition">
+                                <i class="fa-solid fa-image mr-1.5"></i> โปสเตอร์
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab: Quotation -->
+            <div id="tab-quotation" class="tab-content hidden-view fade-in">
+                <h2 class="text-2xl font-bold mb-6 border-b-2 border-pastel pb-2 inline-block">สร้างใบเสนอราคา</h2>
+                <div class="bg-white rounded-xl shadow-sm p-6 max-w-4xl border border-gray-100">
+                    <p class="text-gray-600 mb-6"><i class="fa-solid fa-info-circle text-pastel-dark"></i> กรอกข้อมูลลูกค้าและเลือกผลิตภัณฑ์เพื่อออกใบเสนอราคา</p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                        <div>
+                            <label class="block text-sm font-semibold mb-1 text-gray-600">ชื่อลูกค้า / บริษัท</label>
+                            <input type="text" placeholder="ระบุชื่อลูกค้าหรือชื่อบริษัท" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pastel outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold mb-1 text-gray-600">วันที่เสนอราคา</label>
+                            <input type="date" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pastel outline-none">
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-semibold mb-1 text-gray-600">ที่อยู่ลูกค้า</label>
+                            <textarea rows="2" placeholder="ระบุที่อยู่ของลูกค้า" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pastel outline-none"></textarea>
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-semibold mb-1 text-gray-600">เลือกผลิตภัณฑ์</label>
+                            <select class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pastel outline-none bg-white">
+                                <option value="" disabled selected>-- กรุณาเลือกผลิตภัณฑ์ --</option>
+                                <option value="pos">Pixcel POS System</option>
+                                <option value="crm">Pixcel CRM & ERP</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold mb-1 text-gray-600">ราคาเสนอขาย (บาท)</label>
+                            <input type="number" placeholder="0.00" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pastel outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold mb-1 text-gray-600">ส่วนลด (ถ้ามี)</label>
+                            <input type="number" placeholder="0.00" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pastel outline-none">
+                        </div>
+                    </div>
+
+                    <div class="flex justify-end gap-3 pt-4 border-t border-gray-100">
+                        <button class="bg-pastel hover:bg-pastel-dark text-white font-bold py-2 px-6 rounded-lg transition duration-300 shadow-md">
+                            <i class="fa-solid fa-file-pdf mr-2"></i> สร้างใบเสนอราคา (PDF)
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab: Temporary Receipt -->
+            <div id="tab-receipt" class="tab-content hidden-view fade-in">
+                <h2 class="text-2xl font-bold mb-6 border-b-2 border-pastel pb-2 inline-block">ใบเสร็จรับเงิน (ชั่วคราว)</h2>
+                <div class="bg-white rounded-xl shadow-sm p-6 max-w-4xl border border-gray-100">
+                    <p class="text-yellow-600 bg-yellow-50 p-3 rounded-lg border border-yellow-200 mb-6 text-sm">
+                        <i class="fa-solid fa-circle-info mr-1"></i> <b>ส่วนกลาง (Shared Data):</b> ข้อมูลที่ถูกบันทึกในหน้านี้จะถูกเก็บไว้เป็นค่าล่าสุดเสมอ
+                    </p>
+                    
+                    <div id="form-receipt">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                            <div>
+                                <label class="block text-sm font-semibold mb-1 text-gray-600">เลขที่ใบเสร็จ</label>
+                                <input type="text" id="receipt-no" placeholder="เช่น REC-2026-001" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pastel outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold mb-1 text-gray-600">วันที่</label>
+                                <input type="date" id="receipt-date" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pastel outline-none">
+                            </div>
+                            <div class="md:col-span-2">
+                                <label class="block text-sm font-semibold mb-1 text-gray-600">ได้รับเงินจาก</label>
+                                <input type="text" id="receipt-customer" placeholder="ระบุชื่อลูกค้า" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pastel outline-none">
+                            </div>
+                            <div class="md:col-span-2">
+                                <label class="block text-sm font-semibold mb-1 text-gray-600">เพื่อชำระค่า</label>
+                                <textarea id="receipt-desc" rows="2" placeholder="ระบุรายละเอียดการชำระเงิน" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pastel outline-none"></textarea>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold mb-1 text-gray-600">จำนวนเงิน (บาท)</label>
+                                <input type="number" id="receipt-amount" placeholder="0.00" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pastel outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold mb-1 text-gray-600">ช่องทางการชำระเงิน</label>
+                                <select id="receipt-method" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pastel outline-none bg-white">
+                                    <option value="cash">เงินสด / Cash</option>
+                                    <option value="transfer">โอนเงิน / Bank Transfer</option>
+                                    <option value="credit">บัตรเครดิต / Credit Card</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="flex justify-end gap-3 pt-4 border-t border-gray-100">
+                            <button type="button" onclick="loadSharedReceipt()" class="bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold py-2 px-4 rounded-lg transition duration-300">
+                                ดึงข้อมูลล่าสุด
+                            </button>
+                            <button type="button" onclick="saveSharedReceipt(this)" class="bg-pastel hover:bg-pastel-dark text-white font-bold py-2 px-6 rounded-lg transition duration-300 shadow-md">
+                                บันทึกข้อมูล
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab: Settings (Admin Only) -->
+            <div id="tab-settings" class="tab-content hidden-view fade-in">
+                <h2 class="text-2xl font-bold mb-6 border-b-2 text-red-500 border-red-200 pb-2 inline-block">ตั้งค่าระบบ (สำหรับ Admin)</h2>
+                
+                <div class="flex flex-wrap border-b border-gray-200 mb-6 gap-2">
+                    <button onclick="switchSettingTab('setting-company', this)" class="setting-tab-btn flex items-center px-4 py-2 text-sm font-bold text-pastel-dark border-b-2 border-pastel focus:outline-none transition-colors">
+                        <i class="fa-solid fa-building mr-2"></i> ข้อมูลบริษัท
+                    </button>
+                    <button onclick="switchSettingTab('setting-users', this)" class="setting-tab-btn flex items-center px-4 py-2 text-sm font-medium text-gray-500 hover:text-gray-700 border-b-2 border-transparent hover:border-gray-300 focus:outline-none transition-colors">
+                        <i class="fa-solid fa-users-gear mr-2"></i> จัดการผู้ใช้งาน
+                    </button>
+                    <button onclick="switchSettingTab('setting-commission', this)" class="setting-tab-btn flex items-center px-4 py-2 text-sm font-medium text-gray-500 hover:text-gray-700 border-b-2 border-transparent hover:border-gray-300 focus:outline-none transition-colors">
+                        <i class="fa-solid fa-sliders mr-2"></i> ตั้งค่าคอมมิชชั่น
+                    </button>
+                    <button onclick="switchSettingTab('setting-packages', this)" class="setting-tab-btn flex items-center px-4 py-2 text-sm font-medium text-gray-500 hover:text-gray-700 border-b-2 border-transparent hover:border-gray-300 focus:outline-none transition-colors">
+                        <i class="fa-solid fa-tags mr-2"></i> ตั้งค่าราคาแพคเกจ
+                    </button>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-sm p-6 max-w-4xl border border-gray-100 min-h-[400px]">
+                    <!-- ส่วน 1: ข้อมูลบริษัท -->
+                    <div id="setting-company" class="setting-content fade-in">
+                        
+                        <!-- ช่องเชื่อมต่อ Google Sheet ID -->
+                        <div class="mb-8 p-5 bg-red-50 rounded-xl border border-red-200 shadow-sm">
+                            <h3 class="font-bold text-lg mb-2 text-red-800"><i class="fa-solid fa-database mr-2"></i>ตั้งค่าฐานข้อมูล (Google Sheet ID)</h3>
+                            <p class="text-sm text-red-600 mb-4">หากต้องการเปลี่ยน Database ให้สร้าง Google Sheet ใหม่แล้วเอา <b>Sheet ID</b> มาวางที่นี่ครับ</p>
+                            <div>
+                                <input type="text" id="setting-sheet-id" placeholder="เช่น 1BxiMVs0XRX5nZYgNZJz..." class="w-full px-4 py-2 border border-red-300 rounded-lg focus:ring-2 focus:ring-red-400 outline-none mb-2">
+                                <div class="flex justify-end">
+                                    <button type="button" onclick="saveSheetId()" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-6 rounded-lg transition shadow-md flex items-center">
+                                        <i class="fa-solid fa-link mr-2"></i> บันทึกการเชื่อมต่อ
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h3 class="font-bold text-lg mb-4 text-gray-800 border-b pb-2">การตั้งค่าเริ่มต้นของระบบ</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                            <!-- Logo -->
+                            <div class="md:col-span-2 flex items-center gap-4">
+                                <div id="company-logo-preview" class="w-20 h-20 bg-gray-50 rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center text-gray-400 overflow-hidden">
+                                    <i class="fa-solid fa-image text-2xl"></i>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-semibold mb-1 text-gray-600">โลโก้บริษัท (Logo)</label>
+                                    <input type="file" id="company-logo-upload" accept="image/*" class="text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-pastel-light file:text-pastel-dark hover:file:bg-pastel transition cursor-pointer" onchange="handleCompanyLogoUpload(event)">
+                                    <p class="text-xs text-gray-400 mt-1">รองรับไฟล์ JPG, PNG ขนาดไม่เกิน 2MB</p>
+                                </div>
+                            </div>
+                            
+                            <!-- ชื่อบริษัท -->
+                            <div>
+                                <label class="block text-sm font-semibold mb-1 text-gray-600">ชื่อบริษัท</label>
+                                <input type="text" id="comp-name" placeholder="ระบุชื่อบริษัท" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pastel outline-none">
+                            </div>
+                            
+                            <!-- เลขประจำตัวผู้เสียภาษี -->
+                            <div>
+                                <label class="block text-sm font-semibold mb-1 text-gray-600">เลขประจำตัวผู้เสียภาษี (13 หลัก)</label>
+                                <input type="text" id="comp-tax" placeholder="ระบุเลขผู้เสียภาษี" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pastel outline-none">
+                            </div>
+
+                            <!-- ที่อยู่ -->
+                            <div class="md:col-span-2">
+                                <label class="block text-sm font-semibold mb-1 text-gray-600">ที่อยู่บริษัท</label>
+                                <textarea id="comp-address" rows="2" placeholder="ระบุที่อยู่บริษัท" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pastel outline-none"></textarea>
+                            </div>
+                            
+                            <!-- เบอร์โทรติดต่อ -->
+                            <div>
+                                <label class="block text-sm font-semibold mb-1 text-gray-600">เบอร์โทรติดต่อ</label>
+                                <input type="tel" id="comp-phone" placeholder="ระบุเบอร์โทรศัพท์" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pastel outline-none">
+                            </div>
+
+                            <!-- Website -->
+                            <div>
+                                <label class="block text-sm font-semibold mb-1 text-gray-600">เว็บไซต์ (Website)</label>
+                                <input type="url" id="comp-website" placeholder="https://www.example.com" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pastel outline-none">
+                            </div>
+                        </div>
+                        <div class="flex justify-end pt-4 border-t border-gray-100">
+                            <button type="button" onclick="saveCompanySettings(this)" class="bg-pastel hover:bg-pastel-dark text-white font-bold py-2 px-6 rounded-lg transition duration-300 shadow-md">
+                                <i class="fa-solid fa-save mr-2"></i> บันทึกข้อมูลบริษัท
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- ส่วน 2: จัดการผู้ใช้งาน -->
+                    <div id="setting-users" class="setting-content hidden-view fade-in">
+                        <h3 class="font-bold text-lg mb-4 text-gray-800 border-b pb-2">จัดการผู้ใช้งาน (รอยืนยัน)</h3>
+                        <div class="overflow-x-auto mb-8">
+                            <table class="w-full text-sm text-left text-gray-500">
+                                <thead class="text-xs text-gray-700 uppercase bg-pastel-light">
+                                    <tr>
+                                        <th class="px-4 py-3 rounded-tl-lg">ID</th>
+                                        <th class="px-4 py-3">ชื่อ - นามสกุล</th>
+                                        <th class="px-4 py-3">สถานะ</th>
+                                        <th class="px-4 py-3 rounded-tr-lg text-center">จัดการ</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="border-b">
+                                        <td class="px-4 py-3 font-medium text-gray-900">pc-2026-002</td>
+                                        <td class="px-4 py-3">สมชาย ตัวอย่าง</td>
+                                        <td class="px-4 py-3"><span class="bg-yellow-100 text-yellow-800 text-xs font-bold px-2 py-1 rounded">Pending</span></td>
+                                        <td class="px-4 py-3 text-center">
+                                            <button class="text-white bg-pastel hover:bg-pastel-dark px-3 py-1 rounded text-xs font-bold transition shadow-sm">อนุมัติ</button>
+                                            <button class="text-white bg-red-400 hover:bg-red-500 px-3 py-1 rounded text-xs font-bold transition shadow-sm ml-1">ปฏิเสธ</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- ส่วน 3: ตั้งค่าคอมมิชชั่น -->
+                    <div id="setting-commission" class="setting-content hidden-view fade-in">
+                        <div class="flex justify-between items-center mb-4 border-b pb-2">
+                            <h3 class="font-bold text-lg text-gray-800">ตั้งค่าระดับสมาชิกและคอมมิชชั่น</h3>
+                            <button class="bg-pastel hover:bg-pastel-dark text-white font-bold py-1 px-3 rounded text-sm transition shadow-sm flex items-center">
+                                <i class="fa-solid fa-plus mr-1"></i> เพิ่มระดับ
+                            </button>
+                        </div>
+                        <p class="text-sm text-gray-500 mb-4"><i class="fa-solid fa-circle-info text-pastel-dark"></i> ระบบจะปรับระดับสมาชิก (Level) อัตโนมัติเมื่อ "ยอดขายสะสม" ของตัวแทนจำหน่ายถึงเกณฑ์ที่กำหนดด้านล่างนี้</p>
+
+                        <div class="overflow-x-auto mb-6">
+                            <table class="w-full text-sm text-left text-gray-500">
+                                <thead class="text-xs text-gray-700 uppercase bg-pastel-light">
+                                    <tr>
+                                        <th class="px-4 py-3 rounded-tl-lg">ระดับ (Level Name)</th>
+                                        <th class="px-4 py-3">ยอดขายสะสมขั้นต่ำ (บาท)</th>
+                                        <th class="px-4 py-3">ค่าคอมมิชชั่น (%)</th>
+                                        <th class="px-4 py-3 rounded-tr-lg text-center">จัดการ</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="border-b hover:bg-gray-50">
+                                        <td class="px-4 py-3"><input type="text" value="Starter" class="w-full px-2 py-1 border border-gray-200 rounded font-bold text-gray-700 focus:ring-1 focus:ring-pastel outline-none"></td>
+                                        <td class="px-4 py-3"><input type="number" value="0" class="w-24 px-2 py-1 border border-gray-200 rounded focus:ring-1 focus:ring-pastel outline-none"></td>
+                                        <td class="px-4 py-3"><input type="number" value="10" class="w-20 px-2 py-1 border border-gray-200 rounded focus:ring-1 focus:ring-pastel outline-none"> %</td>
+                                        <td class="px-4 py-3 text-center"><button class="text-gray-400 hover:text-red-500" title="ลบระดับนี้"><i class="fa-solid fa-trash"></i></button></td>
+                                    </tr>
+                                    <tr class="border-b hover:bg-gray-50 bg-gray-50/50">
+                                        <td class="px-4 py-3"><input type="text" value="Silver" class="w-full px-2 py-1 border border-gray-200 rounded font-bold text-blue-600 focus:ring-1 focus:ring-pastel outline-none"></td>
+                                        <td class="px-4 py-3"><input type="number" value="50000" class="w-full px-2 py-1 border border-gray-200 rounded focus:ring-1 focus:ring-pastel outline-none"></td>
+                                        <td class="px-4 py-3"><input type="number" value="15" class="w-20 px-2 py-1 border border-gray-200 rounded focus:ring-1 focus:ring-pastel outline-none"> %</td>
+                                        <td class="px-4 py-3 text-center"><button class="text-gray-400 hover:text-red-500" title="ลบระดับนี้"><i class="fa-solid fa-trash"></i></button></td>
+                                    </tr>
+                                    <tr class="border-b hover:bg-gray-50">
+                                        <td class="px-4 py-3"><input type="text" value="Gold" class="w-full px-2 py-1 border border-gray-200 rounded font-bold text-yellow-500 focus:ring-1 focus:ring-pastel outline-none"></td>
+                                        <td class="px-4 py-3"><input type="number" value="150000" class="w-full px-2 py-1 border border-gray-200 rounded focus:ring-1 focus:ring-pastel outline-none"></td>
+                                        <td class="px-4 py-3"><input type="number" value="20" class="w-20 px-2 py-1 border border-gray-200 rounded focus:ring-1 focus:ring-pastel outline-none"> %</td>
+                                        <td class="px-4 py-3 text-center"><button class="text-gray-400 hover:text-red-500" title="ลบระดับนี้"><i class="fa-solid fa-trash"></i></button></td>
+                                    </tr>
+                                    <tr class="border-b hover:bg-gray-50 bg-gray-50/50">
+                                        <td class="px-4 py-3"><input type="text" value="VIP" class="w-full px-2 py-1 border border-gray-200 rounded font-bold text-purple-600 focus:ring-1 focus:ring-pastel outline-none"></td>
+                                        <td class="px-4 py-3"><input type="number" value="500000" class="w-full px-2 py-1 border border-gray-200 rounded focus:ring-1 focus:ring-pastel outline-none"></td>
+                                        <td class="px-4 py-3"><input type="number" value="25" class="w-20 px-2 py-1 border border-gray-200 rounded focus:ring-1 focus:ring-pastel outline-none"> %</td>
+                                        <td class="px-4 py-3 text-center"><button class="text-gray-400 hover:text-red-500" title="ลบระดับนี้"><i class="fa-solid fa-trash"></i></button></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <div class="mt-4 pt-4 border-t border-gray-100 flex justify-end">
+                            <button class="bg-pastel hover:bg-pastel-dark text-white font-bold py-2 px-6 rounded-lg transition duration-300 shadow-md">
+                                <i class="fa-solid fa-save mr-2"></i> บันทึกระดับและคอมมิชชั่น
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- ส่วน 4: ตั้งค่าราคาแพคเกจ (แก้ไขใหม่) -->
+                    <div id="setting-packages" class="setting-content hidden-view fade-in">
+                        <div class="flex justify-between items-center mb-4 border-b pb-2">
+                            <h3 class="font-bold text-lg text-gray-800">ตั้งค่าราคาแพคเกจระบบ</h3>
+                            <button onclick="addPackageRow()" class="bg-pastel hover:bg-pastel-dark text-white font-bold py-1 px-3 rounded text-sm transition shadow-sm flex items-center">
+                                <i class="fa-solid fa-plus mr-1"></i> เพิ่มช่วงราคา
+                            </button>
+                        </div>
+                        <p class="text-sm text-gray-500 mb-4"><i class="fa-solid fa-circle-info text-pastel-dark"></i> เลือกระบบผลิตภัณฑ์ที่ต้องการตั้งค่า จากนั้นกำหนดอัตราค่าบริการรายเดือนตามช่วงจำนวนยูนิต</p>
+
+                        <!-- เลือกผลิตภัณฑ์ก่อน -->
+                        <div class="mb-6 p-4 bg-gray-50 border border-gray-200 rounded-lg flex flex-col md:flex-row items-start md:items-center gap-4">
+                            <label class="font-bold text-gray-700 whitespace-nowrap"><i class="fa-solid fa-box-open mr-2 text-pastel-dark"></i>เลือกผลิตภัณฑ์ :</label>
+                            <select id="package-product-selector" class="w-full md:w-1/2 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pastel outline-none bg-white cursor-pointer font-semibold" onchange="filterPackages()">
+                                <option value="pos">Pixcel POS System</option>
+                                <option value="crm" selected>Pixcel CRM & ERP</option>
+                            </select>
+                        </div>
+
+                        <div class="overflow-x-auto mb-6">
+                            <table class="w-full text-sm text-left text-gray-500">
+                                <thead class="text-xs text-gray-700 uppercase bg-pastel-light">
+                                    <tr>
+                                        <th class="px-4 py-3 rounded-tl-lg text-center w-24">ลำดับ</th>
+                                        <th class="px-4 py-3 text-center">ช่วงจำนวนหลัง/ห้อง (ยูนิต)</th>
+                                        <th class="px-4 py-3 text-right">ราคาต่อเดือน (บาท) <br><span class="text-[10px] text-gray-400 font-normal">(ยังไม่รวม VAT)</span></th>
+                                        <th class="px-4 py-3 rounded-tr-lg text-center w-20">จัดการ</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="package-list-body">
+                                    <!-- แถวสำหรับ CRM -->
+                                    <tr class="border-b hover:bg-gray-50 package-row" data-product="crm">
+                                        <td class="px-4 py-3 text-center"><input type="number" value="1" class="w-16 px-2 py-1 border border-gray-200 rounded focus:ring-1 focus:ring-pastel outline-none text-center"></td>
+                                        <td class="px-4 py-3">
+                                            <div class="flex items-center justify-center gap-2">
+                                                <input type="number" value="1" placeholder="เริ่มต้น" class="w-24 px-2 py-1 border border-gray-200 rounded focus:ring-1 focus:ring-pastel outline-none text-center">
+                                                <span class="text-gray-400">ถึง</span>
+                                                <input type="number" value="50" placeholder="สูงสุด" class="w-24 px-2 py-1 border border-gray-200 rounded focus:ring-1 focus:ring-pastel outline-none text-center">
+                                            </div>
+                                        </td>
+                                        <td class="px-4 py-3 text-right"><input type="number" value="50" class="w-full max-w-[120px] px-2 py-1 border border-gray-200 rounded focus:ring-1 focus:ring-pastel outline-none text-right ml-auto"></td>
+                                        <td class="px-4 py-3 text-center"><button class="text-gray-400 hover:text-red-500" title="ลบรายการนี้" onclick="this.closest('tr').remove()"><i class="fa-solid fa-trash"></i></button></td>
+                                    </tr>
+                                    <tr class="border-b hover:bg-gray-50 package-row" data-product="crm">
+                                        <td class="px-4 py-3 text-center"><input type="number" value="2" class="w-16 px-2 py-1 border border-gray-200 rounded focus:ring-1 focus:ring-pastel outline-none text-center"></td>
+                                        <td class="px-4 py-3">
+                                            <div class="flex items-center justify-center gap-2">
+                                                <input type="number" value="51" placeholder="เริ่มต้น" class="w-24 px-2 py-1 border border-gray-200 rounded focus:ring-1 focus:ring-pastel outline-none text-center">
+                                                <span class="text-gray-400">ถึง</span>
+                                                <input type="number" value="100" placeholder="สูงสุด" class="w-24 px-2 py-1 border border-gray-200 rounded focus:ring-1 focus:ring-pastel outline-none text-center">
+                                            </div>
+                                        </td>
+                                        <td class="px-4 py-3 text-right"><input type="number" value="45" class="w-full max-w-[120px] px-2 py-1 border border-gray-200 rounded focus:ring-1 focus:ring-pastel outline-none text-right ml-auto"></td>
+                                        <td class="px-4 py-3 text-center"><button class="text-gray-400 hover:text-red-500" title="ลบรายการนี้" onclick="this.closest('tr').remove()"><i class="fa-solid fa-trash"></i></button></td>
+                                    </tr>
+                                    
+                                    <!-- แถวสำหรับ POS (ซ่อนไว้ก่อนเพราะ default คือ crm) -->
+                                    <tr class="border-b hover:bg-gray-50 package-row hidden" data-product="pos">
+                                        <td class="px-4 py-3 text-center"><input type="number" value="1" class="w-16 px-2 py-1 border border-gray-200 rounded focus:ring-1 focus:ring-pastel outline-none text-center"></td>
+                                        <td class="px-4 py-3">
+                                            <div class="flex items-center justify-center gap-2">
+                                                <input type="number" value="1" placeholder="เริ่มต้น" class="w-24 px-2 py-1 border border-gray-200 rounded focus:ring-1 focus:ring-pastel outline-none text-center">
+                                                <span class="text-gray-400">ถึง</span>
+                                                <input type="number" placeholder="ไม่จำกัด" class="w-24 px-2 py-1 border border-gray-200 rounded focus:ring-1 focus:ring-pastel outline-none text-center bg-gray-100" disabled>
+                                            </div>
+                                        </td>
+                                        <td class="px-4 py-3 text-right"><input type="number" value="500" class="w-full max-w-[120px] px-2 py-1 border border-gray-200 rounded focus:ring-1 focus:ring-pastel outline-none text-right ml-auto"></td>
+                                        <td class="px-4 py-3 text-center"><button class="text-gray-400 hover:text-red-500" title="ลบรายการนี้" onclick="this.closest('tr').remove()"><i class="fa-solid fa-trash"></i></button></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <div class="mt-4 pt-4 border-t border-gray-100 flex justify-end">
+                            <button class="bg-pastel hover:bg-pastel-dark text-white font-bold py-2 px-6 rounded-lg transition duration-300 shadow-md">
+                                <i class="fa-solid fa-save mr-2"></i> บันทึกราคาแพคเกจ
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Modal: เพิ่มผลิตภัณฑ์ (Admin) -->
+    <div id="modal-add-product" class="fixed inset-0 bg-gray-900/50 z-50 flex items-center justify-center hidden-view fade-in p-4 backdrop-blur-sm">
+        <div class="bg-white rounded-2xl shadow-xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col">
+            <div class="p-6 border-b border-gray-100 flex justify-between items-center bg-pastel-light/30">
+                <h3 class="text-xl font-bold text-gray-800"><i class="fa-solid fa-box-open text-pastel-dark mr-2"></i>เพิ่มผลิตภัณฑ์ใหม่</h3>
+                <button onclick="closeAddProductModal()" class="text-gray-400 hover:text-red-500 transition"><i class="fa-solid fa-xmark text-xl"></i></button>
+            </div>
+            <div class="p-6 overflow-y-auto flex-1">
+                <div id="form-add-product">
+                    <div class="grid grid-cols-1 gap-5">
+                        <div>
+                            <label class="block text-sm font-semibold mb-1 text-gray-700">ชื่อผลิตภัณฑ์ <span class="text-red-500">*</span></label>
+                            <input type="text" id="prod-name" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pastel outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold mb-1 text-gray-700">รายละเอียด <span class="text-red-500">*</span></label>
+                            <textarea id="prod-desc" rows="2" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pastel outline-none"></textarea>
+                        </div>
+                        
+                        <!-- ส่วนแนบลิงก์ที่อัปเกรดให้เลือกระหว่าง URL หรือ อัปโหลดไฟล์ -->
+                        <div class="border-t border-gray-100 pt-4 mt-2">
+                            <h4 class="font-bold text-sm text-gray-800 mb-3"><i class="fa-solid fa-link text-pastel-dark mr-1"></i> แนบเอกสารอ้างอิง <span class="text-gray-400 font-normal text-xs">(เลือกแบบ Link หรือ อัปโหลดไฟล์)</span></h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                
+                                <!-- Present -->
+                                <div class="p-3 bg-gray-50 rounded-lg border border-gray-100">
+                                    <div class="flex justify-between items-center mb-2">
+                                        <label class="block text-xs font-semibold text-gray-600"><i class="fa-solid fa-file-powerpoint text-blue-500 mr-1"></i> Presentation</label>
+                                        <select class="text-[10px] bg-white border border-gray-300 rounded px-1 py-0.5 outline-none cursor-pointer" onchange="toggleAttachmentType('present', this.value)">
+                                            <option value="url">ลิงก์ URL</option>
+                                            <option value="file">อัปโหลดไฟล์</option>
+                                        </select>
+                                    </div>
+                                    <input type="url" id="prod-present-url" placeholder="https://" class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-300 outline-none transition">
+                                    <input type="file" id="prod-present-file" accept="image/*,.pdf,.ppt,.pptx" class="hidden w-full text-xs text-gray-500 file:mr-2 file:py-1 file:px-3 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer border border-gray-300 rounded-lg bg-white" onchange="handleProductFileUpload('present', event)">
+                                    <input type="hidden" id="prod-present-base64">
+                                </div>
+
+                                <!-- Demo -->
+                                <div class="p-3 bg-gray-50 rounded-lg border border-gray-100">
+                                    <div class="flex justify-between items-center mb-2">
+                                        <label class="block text-xs font-semibold text-gray-600"><i class="fa-solid fa-play-circle text-purple-500 mr-1"></i> Demo การใช้งาน</label>
+                                        <select class="text-[10px] bg-white border border-gray-300 rounded px-1 py-0.5 outline-none cursor-pointer" onchange="toggleAttachmentType('demo', this.value)">
+                                            <option value="url">ลิงก์ URL</option>
+                                            <option value="file">อัปโหลดไฟล์</option>
+                                        </select>
+                                    </div>
+                                    <input type="url" id="prod-demo-url" placeholder="https://" class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-300 outline-none transition">
+                                    <input type="file" id="prod-demo-file" accept="image/*,.mp4,.pdf" class="hidden w-full text-xs text-gray-500 file:mr-2 file:py-1 file:px-3 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100 cursor-pointer border border-gray-300 rounded-lg bg-white" onchange="handleProductFileUpload('demo', event)">
+                                    <input type="hidden" id="prod-demo-base64">
+                                </div>
+
+                                <!-- Price -->
+                                <div class="p-3 bg-gray-50 rounded-lg border border-gray-100">
+                                    <div class="flex justify-between items-center mb-2">
+                                        <label class="block text-xs font-semibold text-gray-600"><i class="fa-solid fa-tags text-green-500 mr-1"></i> ราคาแพคเกจ</label>
+                                        <select class="text-[10px] bg-white border border-gray-300 rounded px-1 py-0.5 outline-none cursor-pointer" onchange="toggleAttachmentType('price', this.value)">
+                                            <option value="url">ลิงก์ URL</option>
+                                            <option value="file">อัปโหลดไฟล์</option>
+                                        </select>
+                                    </div>
+                                    <input type="url" id="prod-price-url" placeholder="https://" class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-300 outline-none transition">
+                                    <input type="file" id="prod-price-file" accept="image/*,.pdf" class="hidden w-full text-xs text-gray-500 file:mr-2 file:py-1 file:px-3 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100 cursor-pointer border border-gray-300 rounded-lg bg-white" onchange="handleProductFileUpload('price', event)">
+                                    <input type="hidden" id="prod-price-base64">
+                                </div>
+
+                                <!-- Poster -->
+                                <div class="p-3 bg-gray-50 rounded-lg border border-gray-100">
+                                    <div class="flex justify-between items-center mb-2">
+                                        <label class="block text-xs font-semibold text-gray-600"><i class="fa-solid fa-image text-orange-500 mr-1"></i> โปสเตอร์</label>
+                                        <select class="text-[10px] bg-white border border-gray-300 rounded px-1 py-0.5 outline-none cursor-pointer" onchange="toggleAttachmentType('poster', this.value)">
+                                            <option value="url">ลิงก์ URL</option>
+                                            <option value="file">อัปโหลดไฟล์</option>
+                                        </select>
+                                    </div>
+                                    <input type="url" id="prod-poster-url" placeholder="https://" class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-300 outline-none transition">
+                                    <input type="file" id="prod-poster-file" accept="image/*" class="hidden w-full text-xs text-gray-500 file:mr-2 file:py-1 file:px-3 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-orange-50 file:text-orange-700 hover:file:bg-orange-100 cursor-pointer border border-gray-300 rounded-lg bg-white" onchange="handleProductFileUpload('poster', event)">
+                                    <input type="hidden" id="prod-poster-base64">
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="p-6 border-t border-gray-100 bg-gray-50 flex justify-end gap-3">
+                <button onclick="closeAddProductModal()" type="button" class="px-6 py-2 rounded-lg font-bold text-gray-600 bg-white border border-gray-300 hover:bg-gray-100 transition">ยกเลิก</button>
+                <button type="button" onclick="saveNewProduct()" class="px-6 py-2 rounded-lg font-bold text-white bg-pastel hover:bg-pastel-dark transition shadow-md">บันทึกผลิตภัณฑ์</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: เพิ่มลูกค้าใหม่ -->
+    <div id="modal-add-customer" class="fixed inset-0 bg-gray-900/50 z-50 flex items-center justify-center hidden-view fade-in p-4 backdrop-blur-sm">
+        <div class="bg-white rounded-2xl shadow-xl w-full max-w-2xl overflow-hidden flex flex-col max-h-[90vh]">
+            <div class="p-6 border-b border-gray-100 flex justify-between items-center bg-pastel-light/30">
+                <h3 class="text-xl font-bold text-gray-800"><i class="fa-solid fa-user-plus text-pastel-dark mr-2"></i>เพิ่มลูกค้าใหม่</h3>
+                <button onclick="closeAddCustomerModal()" class="text-gray-400 hover:text-red-500 transition"><i class="fa-solid fa-xmark text-xl"></i></button>
+            </div>
+            <div class="p-6 overflow-y-auto flex-1">
+                <div id="form-add-customer" class="space-y-4">
+                    
+                    <h4 class="font-bold text-gray-700 border-b pb-2"><i class="fa-solid fa-building mr-2 text-pastel-dark"></i>ข้อมูลบริษัท/ลูกค้า</h4>
+                    <div class="grid grid-cols-1 gap-4">
+                        <div>
+                            <label class="block text-sm font-semibold mb-1 text-gray-700">ชื่อบริษัท / ลูกค้า <span class="text-red-500">*</span></label>
+                            <input type="text" id="cust-company" placeholder="ระบุชื่อบริษัท หรือ ชื่อลูกค้า" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pastel outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold mb-1 text-gray-700">ที่อยู่</label>
+                            <textarea id="cust-address" rows="2" placeholder="ระบุที่อยู่ของบริษัท/ลูกค้า" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pastel outline-none"></textarea>
+                        </div>
+                    </div>
+
+                    <h4 class="font-bold text-gray-700 border-b pb-2 mt-4"><i class="fa-solid fa-address-book mr-2 text-pastel-dark"></i>ข้อมูลผู้ติดต่อ</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-semibold mb-1 text-gray-700">ชื่อผู้ติดต่อ <span class="text-red-500">*</span></label>
+                            <input type="text" id="cust-contact-name" placeholder="ระบุชื่อผู้ที่ใช้ประสานงาน" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pastel outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold mb-1 text-gray-700">เบอร์โทรศัพท์ติดต่อ <span class="text-red-500">*</span></label>
+                            <input type="tel" id="cust-phone" placeholder="08X-XXX-XXXX" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pastel outline-none">
+                        </div>
+                    </div>
+
+                    <h4 class="font-bold text-gray-700 border-b pb-2 mt-4"><i class="fa-solid fa-city mr-2 text-pastel-dark"></i>ข้อมูลหน่วยงาน (สำหรับคำนวณแพคเกจ)</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 bg-gray-50 p-4 rounded-lg border border-gray-200">
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-semibold mb-1 text-gray-700">ชื่อหน่วยงาน / โครงการ <span class="text-red-500">*</span></label>
+                            <input type="text" id="cust-branch" placeholder="เช่น สาขา 1, โครงการ A" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pastel outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold mb-1 text-gray-700">อัตราแพคเกจระบบ</label>
+                            <select id="cust-package" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pastel outline-none bg-white cursor-pointer" onchange="calculateCustomerPrice()">
+                                <option value="30">Standard Package (30 บาท/ห้อง)</option>
+                                <option value="50" selected>Premium Package (50 บาท/ห้อง)</option>
+                                <option value="100">Enterprise Package (100 บาท/ห้อง)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold mb-1 text-gray-700">จำนวนห้อง / บ้าน (ยูนิต) <span class="text-red-500">*</span></label>
+                            <input type="number" id="cust-units" min="0" placeholder="ระบุจำนวน" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pastel outline-none" oninput="calculateCustomerPrice()">
+                        </div>
+                        
+                        <!-- แสดงผลการคำนวณ -->
+                        <div class="md:col-span-2 mt-2 p-4 bg-blue-50 border border-blue-200 rounded-lg text-center flex flex-col justify-center items-center">
+                            <span class="text-sm text-blue-800 font-semibold mb-1"><i class="fa-solid fa-calculator mr-1"></i> ราคาแพคเกจต่อเดือนที่ต้องชำระ:</span>
+                            <div id="cust-calculated-price" class="text-3xl font-bold text-blue-700 shadow-sm bg-white px-6 py-2 rounded-lg border border-blue-100 min-w-[200px]">฿ 0.00</div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="p-6 border-t border-gray-100 bg-gray-50 flex justify-end gap-3">
+                <button onclick="closeAddCustomerModal()" type="button" class="px-6 py-2 rounded-lg font-bold text-gray-600 bg-white border border-gray-300 hover:bg-gray-100 transition">ยกเลิก</button>
+                <button type="button" onclick="saveNewCustomer()" class="px-6 py-2 rounded-lg font-bold text-white bg-pastel hover:bg-pastel-dark transition shadow-md">บันทึกข้อมูลลูกค้า</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== JAVASCRIPT LOGIC ==================== -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const savedSheetId = localStorage.getItem('pixcel_sheet_id');
+            if(savedSheetId) {
+                const sheetInput = document.getElementById('setting-sheet-id');
+                if(sheetInput) sheetInput.value = savedSheetId;
+            }
+            // โหลดข้อมูลบริษัทที่บันทึกไว้ขึ้นมาแสดง (ถ้ามี)
+            loadCompanySettings();
+        });
+
+        // ==========================================
+        // ฟังก์ชันสำหรับตั้งค่าบริษัท
+        // ==========================================
+        function handleCompanyLogoUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            if (file.size > 2 * 1024 * 1024) { 
+                alert('ไฟล์รูปภาพต้องมีขนาดไม่เกิน 2MB'); 
+                event.target.value = ''; 
+                return; 
+            }
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const base64Image = e.target.result;
+                const previewContainer = document.getElementById('company-logo-preview');
+                previewContainer.innerHTML = `<img src="${base64Image}" class="w-full h-full object-cover">`;
+                // บันทึกลง LocalStorage
+                localStorage.setItem('pixcel_company_logo', base64Image);
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function saveCompanySettings(btn) {
+            // ดึงข้อมูลจากฟอร์ม
+            const data = {
+                name: document.getElementById('comp-name').value,
+                tax: document.getElementById('comp-tax').value,
+                address: document.getElementById('comp-address').value,
+                phone: document.getElementById('comp-phone').value,
+                website: document.getElementById('comp-website').value
+            };
+            // บันทึกลง LocalStorage (สำหรับการจำลองข้อมูล)
+            localStorage.setItem('pixcel_company_settings', JSON.stringify(data));
+            
+            // เปลี่ยนสถานะปุ่มเพื่อแจ้งเตือน
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fa-solid fa-check mr-2"></i> บันทึกสำเร็จ!';
+            btn.classList.add('bg-green-500');
+            btn.classList.remove('bg-pastel', 'hover:bg-pastel-dark');
+            
+            // หน่วงเวลาคืนค่าปุ่มเดิม
+            setTimeout(() => { 
+                btn.innerHTML = originalText; 
+                btn.classList.remove('bg-green-500');
+                btn.classList.add('bg-pastel', 'hover:bg-pastel-dark');
+            }, 2000);
+        }
+
+        function loadCompanySettings() {
+            // โหลดโลโก้
+            const savedLogo = localStorage.getItem('pixcel_company_logo');
+            if (savedLogo) {
+                const previewContainer = document.getElementById('company-logo-preview');
+                if(previewContainer) previewContainer.innerHTML = `<img src="${savedLogo}" class="w-full h-full object-cover">`;
+            }
+            
+            // โหลดข้อมูลบริษัท
+            const savedSettingsStr = localStorage.getItem('pixcel_company_settings');
+            if(savedSettingsStr) {
+                try {
+                    const data = JSON.parse(savedSettingsStr);
+                    if(document.getElementById('comp-name')) document.getElementById('comp-name').value = data.name || '';
+                    if(document.getElementById('comp-tax')) document.getElementById('comp-tax').value = data.tax || '';
+                    if(document.getElementById('comp-address')) document.getElementById('comp-address').value = data.address || '';
+                    if(document.getElementById('comp-phone')) document.getElementById('comp-phone').value = data.phone || '';
+                    if(document.getElementById('comp-website')) document.getElementById('comp-website').value = data.website || '';
+                } catch(e){}
+            }
+        }
+
+        // ==========================================
+        function saveSheetId() {
+            const sheetId = document.getElementById('setting-sheet-id').value.trim();
+            localStorage.setItem('pixcel_sheet_id', sheetId);
+            alert('บันทึก Sheet ID เรียบร้อยแล้ว ระบบจะเชื่อมต่อกับไฟล์ใหม่ทันทีครับ');
+        }
+
+        function clearInputs(containerId) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            const inputs = container.querySelectorAll('input, textarea, select');
+            inputs.forEach(input => {
+                if (input.type === 'checkbox' || input.type === 'radio') {
+                    input.checked = false;
+                } else if(input.tagName.toLowerCase() !== 'select') {
+                    // ละเว้น Select ไว้เคลียร์แยกกัน
+                    input.value = '';
+                }
+            });
+        }
+
+        function switchView(viewId) {
+            document.getElementById('view-login').classList.add('hidden-view');
+            document.getElementById('view-register').classList.add('hidden-view');
+            document.getElementById('view-dashboard').classList.add('hidden-view');
+            document.getElementById(viewId).classList.remove('hidden-view');
+            
+            if(viewId === 'view-register') {
+                clearInputs('form-register');
+                document.getElementById('reg-message').classList.add('hidden');
+                const btn = document.getElementById('btn-register');
+                btn.innerHTML = '<i class="fa-solid fa-user-plus mr-2"></i> ยืนยันการสมัคร';
+                btn.disabled = false;
+                btn.classList.remove('hidden');
+            } else if (viewId === 'view-login') {
+                clearInputs('login-container');
+            }
+        }
+
+        function switchTab(tabId, element) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden-view'));
+            document.getElementById(tabId).classList.remove('hidden-view');
+            
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.className = "tab-btn flex items-center px-4 py-3 text-gray-600 hover:bg-pastel-light hover:text-pastel-dark rounded-lg transition-colors font-medium";
+            });
+            if(element) {
+                element.className = "tab-btn flex items-center px-4 py-3 bg-pastel text-white rounded-lg transition-colors font-medium";
+            }
+        }
+
+        function switchSettingTab(tabId, element) {
+            document.querySelectorAll('.setting-content').forEach(el => el.classList.add('hidden-view'));
+            document.getElementById(tabId).classList.remove('hidden-view');
+            
+            document.querySelectorAll('.setting-tab-btn').forEach(btn => {
+                btn.className = "setting-tab-btn flex items-center px-4 py-2 text-sm font-medium text-gray-500 hover:text-gray-700 border-b-2 border-transparent hover:border-gray-300 focus:outline-none transition-colors";
+            });
+            if(element) {
+                element.className = "setting-tab-btn flex items-center px-4 py-2 text-sm font-bold text-pastel-dark border-b-2 border-pastel focus:outline-none transition-colors";
+            }
+        }
+
+        // ==========================================
+        // ฟังก์ชันสำหรับแท็บ ตั้งค่าราคาแพคเกจ
+        // ==========================================
+        function filterPackages() {
+            const selectedProduct = document.getElementById('package-product-selector').value;
+            const rows = document.querySelectorAll('.package-row');
+            rows.forEach(row => {
+                if(row.getAttribute('data-product') === selectedProduct) {
+                    row.classList.remove('hidden');
+                } else {
+                    row.classList.add('hidden');
+                }
+            });
+        }
+
+        function addPackageRow() {
+            const selectedProduct = document.getElementById('package-product-selector').value;
+            const tbody = document.getElementById('package-list-body');
+            
+            // นับแถวปัจจุบันเพื่อใส่ลำดับเริ่มต้น
+            const visibleRows = Array.from(tbody.querySelectorAll('.package-row')).filter(r => r.getAttribute('data-product') === selectedProduct);
+            const nextSeq = visibleRows.length + 1;
+
+            const tr = document.createElement('tr');
+            tr.className = "border-b hover:bg-gray-50 package-row fade-in";
+            tr.setAttribute('data-product', selectedProduct);
+            tr.innerHTML = `
+                <td class="px-4 py-3 text-center"><input type="number" value="${nextSeq}" class="w-16 px-2 py-1 border border-gray-200 rounded focus:ring-1 focus:ring-pastel outline-none text-center"></td>
+                <td class="px-4 py-3">
+                    <div class="flex items-center justify-center gap-2">
+                        <input type="number" value="" placeholder="เริ่มต้น" class="w-24 px-2 py-1 border border-gray-200 rounded focus:ring-1 focus:ring-pastel outline-none text-center">
+                        <span class="text-gray-400">ถึง</span>
+                        <input type="number" value="" placeholder="สูงสุด" class="w-24 px-2 py-1 border border-gray-200 rounded focus:ring-1 focus:ring-pastel outline-none text-center">
+                    </div>
+                </td>
+                <td class="px-4 py-3 text-right"><input type="number" value="" class="w-full max-w-[120px] px-2 py-1 border border-gray-200 rounded focus:ring-1 focus:ring-pastel outline-none text-right ml-auto"></td>
+                <td class="px-4 py-3 text-center"><button class="text-gray-400 hover:text-red-500" title="ลบรายการนี้" onclick="this.closest('tr').remove()"><i class="fa-solid fa-trash"></i></button></td>
+            `;
+            tbody.appendChild(tr);
+        }
+
+        // ==========================================
+        // เชื่อมต่อ Backend สำหรับการสมัครสมาชิกและเข้าสู่ระบบ
+        // ==========================================
+        function callBackend(funcName, ...args) {
+            return new Promise((resolve, reject) => {
+                if (typeof google !== 'undefined' && google.script && google.script.run) {
+                    const runner = google.script.run
+                        .withSuccessHandler(resolve)
+                        .withFailureHandler(reject);
+                    
+                    if (funcName === 'registerAgent') {
+                        runner.registerAgent(args[0], args[1]);
+                    } else if (funcName === 'loginAgent') {
+                        runner.loginAgent(args[0], args[1], args[2]);
+                    }
+                } else {
+                    setTimeout(() => {
+                        if (funcName === 'registerAgent') {
+                            const year = new Date().getFullYear();
+                            const randNum = Math.floor(Math.random()*100).toString().padStart(3,'0');
+                            resolve({ success: true, id: `pc-${year}-${randNum}`, message: "ลงทะเบียนสำเร็จ รอแอดมินอนุมัติ" });
+                        } else if (funcName === 'loginAgent') {
+                            const user = args[0];
+                            const pass = args[1];
+                            if (user === "admin" && pass === "bosskim") {
+                                resolve({ success: true, data: { id: "SUPER-ADMIN", name: "Boss Kim (ผู้บริหาร)", level: "Super Admin", address: "สำนักงานใหญ่ Pixcel", phone: "-", email: "admin@pixcel.com", salesThisMonth: 0, sales: 0 }});
+                            } else if (user && pass) {
+                                resolve({ success: true, data: { id: "pc-2026-001", name: "ทดสอบ ตัวแทนจำหน่าย", level: "Starter", address: "123 ถ.สุขุมวิท กทม.", phone: "081-234-5678", email: user, salesThisMonth: 5500, sales: 15000 }});
+                            } else {
+                                resolve({ success: false, message: "Username หรือ Password ไม่ถูกต้อง" });
+                            }
+                        }
+                    }, 1000);
+                }
+            });
+        }
+
+        // === ฟังก์ชัน จัดการ Login และแสดงผล Dashboard ===
+        async function handleLogin() {
+            const user = document.getElementById('login-username').value.trim();
+            const pass = document.getElementById('login-password').value.trim();
+
+            if(!user || !pass) {
+                alert("กรุณากรอก Username และ Password ให้ครบถ้วน");
+                return;
+            }
+            
+            const btn = document.getElementById('btn-login');
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> กำลังเข้าสู่ระบบ...';
+            btn.disabled = true;
+
+            const sheetId = localStorage.getItem('pixcel_sheet_id') || '';
+
+            try {
+                const result = await callBackend('loginAgent', user, pass, sheetId);
+                if(result && result.success) {
+                    const d = result.data;
+                    document.getElementById('dash-username').innerText = d.name.split(' ')[0];
+                    
+                    // จัดการข้อมูลแสดงผลพื้นฐาน
+                    document.getElementById('profile-id').innerText = d.id;
+                    document.getElementById('profile-name').innerText = d.name;
+                    document.getElementById('profile-address').innerText = d.address || '-';
+                    document.getElementById('profile-phone').innerText = d.phone || '-';
+                    document.getElementById('profile-email').innerText = d.email || '-';
+
+                    // กำหนดค่า % คอมมิชชั่นตามระดับ
+                    let commRate = 0.10; // Starter Default 10%
+                    if (d.level === 'Silver') commRate = 0.15;
+                    if (d.level === 'Gold') commRate = 0.20;
+                    if (d.level === 'VIP') commRate = 0.25;
+                    
+                    if (d.level === "Super Admin") {
+                        document.getElementById('dash-level').className = "inline-block mt-1 px-3 py-1 bg-red-100 text-red-600 rounded-full text-xs font-bold";
+                        document.getElementById('dash-level').innerText = "Super Admin";
+                        
+                        document.getElementById('profile-level').innerHTML = `<i class="fa-solid fa-crown"></i> Super Admin`;
+                        document.getElementById('profile-level').className = "font-bold text-lg text-red-600";
+                        
+                        document.getElementById('menu-settings').classList.remove('hidden');
+                        document.getElementById('btn-add-product').classList.remove('hidden');
+                        
+                        // แสดง Dashboard แม้เป็น Admin แต่จะเป็น 0
+                        document.getElementById('profile-sales-dashboard').classList.remove('hidden');
+                        document.getElementById('profile-sales-total').innerText = "฿ 0.00";
+                        document.getElementById('profile-sales-month').innerText = "฿ 0.00";
+                        document.getElementById('profile-commission-month').innerText = "฿ 0.00";
+                        document.getElementById('profile-comm-rate').innerText = "Rate: N/A";
+                        
+                    } else {
+                        document.getElementById('dash-level').className = "inline-block mt-1 px-3 py-1 bg-pastel-light text-pastel-dark rounded-full text-xs font-semibold";
+                        document.getElementById('dash-level').innerText = d.level;
+                        
+                        document.getElementById('profile-level').innerHTML = `<i class="fa-solid fa-star"></i> ${d.level}`;
+                        document.getElementById('profile-level').className = "font-bold text-lg text-yellow-500";
+                        
+                        document.getElementById('menu-settings').classList.add('hidden');
+                        document.getElementById('btn-add-product').classList.add('hidden');
+                        
+                        // แสดง Dashboard ยอดขายสำหรับ User ทั่วไป
+                        document.getElementById('profile-sales-dashboard').classList.remove('hidden');
+                        
+                        const salesMonth = d.salesThisMonth || 0;
+                        const commissionMonth = salesMonth * commRate;
+                        
+                        const formatSalesTotal = new Intl.NumberFormat('th-TH', { style: 'currency', currency: 'THB' }).format(d.sales || 0);
+                        const formatSalesMonth = new Intl.NumberFormat('th-TH', { style: 'currency', currency: 'THB' }).format(salesMonth);
+                        const formatCommission = new Intl.NumberFormat('th-TH', { style: 'currency', currency: 'THB' }).format(commissionMonth);
+                        
+                        document.getElementById('profile-sales-total').innerText = formatSalesTotal;
+                        document.getElementById('profile-sales-month').innerText = formatSalesMonth;
+                        document.getElementById('profile-commission-month').innerText = formatCommission;
+                        document.getElementById('profile-comm-rate').innerText = `Rate: ${commRate * 100}%`;
+                        
+                        const targetSilver = 50000;
+                        let progress = ((d.sales || 0) / targetSilver) * 100;
+                        if(progress > 100) progress = 100;
+                        setTimeout(() => { document.getElementById('profile-progress').style.width = progress + "%"; }, 300);
+                    }
+
+                    switchView('view-dashboard');
+                } else {
+                    alert("ข้อผิดพลาด: " + (result ? result.message : 'การเข้าสู่ระบบล้มเหลว'));
+                }
+            } catch (error) {
+                alert("เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์");
+            } finally {
+                btn.innerHTML = '<i class="fa-solid fa-right-to-bracket mr-2"></i> เข้าสู่ระบบ';
+                btn.disabled = false;
+            }
+        }
+
+        // === ฟังก์ชัน จัดการสมัครสมาชิก ===
+        async function handleRegister() {
+            const nameInput = document.getElementById('reg-name').value.trim();
+            const addressInput = document.getElementById('reg-address').value.trim();
+            const phoneInput = document.getElementById('reg-phone').value.trim();
+            const emailInput = document.getElementById('reg-email').value.trim();
+
+            if(!nameInput || !addressInput || !phoneInput || !emailInput) {
+                alert("กรุณากรอกข้อมูลให้ครบถ้วนก่อนยืนยันการสมัคร");
+                return;
+            }
+
+            const btn = document.getElementById('btn-register');
+            const msgBox = document.getElementById('reg-message');
+            
+            msgBox.classList.add('hidden');
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> กำลังดำเนินการ...';
+            btn.disabled = true;
+
+            const data = { name: nameInput, address: addressInput, phone: phoneInput, email: emailInput };
+            const sheetId = localStorage.getItem('pixcel_sheet_id') || '';
+
+            try {
+                const result = await callBackend('registerAgent', data, sheetId);
+                if(result && result.success) {
+                    msgBox.className = "mt-4 text-center p-5 bg-green-50 text-green-800 rounded-lg border border-green-200 font-medium fade-in shadow-sm";
+                    msgBox.innerHTML = `
+                        <i class="fa-solid fa-circle-check text-4xl mb-3 text-green-500"></i><br>
+                        <span class="text-lg font-bold">สมัครสมาชิกสำเร็จ!</span><br>
+                        รหัสตัวแทนของคุณคือ: <b class="text-xl text-green-700">${result.id}</b><br>
+                        <span class="text-sm mt-3 block text-gray-600 bg-white p-2 rounded">โปรดรอ Admin ยืนยันระบบ</span>
+                    `;
+                    msgBox.classList.remove('hidden');
+                    clearInputs('form-register');
+                    btn.classList.add('hidden'); 
+                } else {
+                    alert("ข้อผิดพลาด: " + (result ? result.message : 'ไม่ทราบสาเหตุ'));
+                    btn.innerHTML = '<i class="fa-solid fa-user-plus mr-2"></i> ยืนยันการสมัคร';
+                    btn.disabled = false;
+                }
+            } catch (error) {
+                alert("การเชื่อมต่อล้มเหลว กรุณาลองใหม่อีกครั้ง");
+                btn.innerHTML = '<i class="fa-solid fa-user-plus mr-2"></i> ยืนยันการสมัคร';
+                btn.disabled = false;
+            }
+        }
+
+        // ==========================================
+        // ฟังก์ชันข้ามเข้าสู่ Dashboard ทันที (สำหรับทดสอบ)
+        // ==========================================
+        function bypassToDashboard() {
+            document.getElementById('dash-username').innerText = "Boss Kim";
+            document.getElementById('dash-level').className = "inline-block mt-1 px-3 py-1 bg-red-100 text-red-600 rounded-full text-xs font-bold";
+            document.getElementById('dash-level').innerText = "Super Admin";
+            
+            document.getElementById('profile-id').innerText = "SUPER-ADMIN";
+            document.getElementById('profile-name').innerText = "Boss Kim (ผู้บริหาร)";
+            document.getElementById('profile-level').innerHTML = `<i class="fa-solid fa-crown"></i> Super Admin`;
+            document.getElementById('profile-level').className = "font-bold text-lg text-red-600";
+            
+            // เปิด Dashboard ให้แอดมินเห็นด้วย
+            document.getElementById('profile-sales-dashboard').classList.remove('hidden');
+            document.getElementById('profile-sales-total').innerText = "฿ 150,000.00";
+            document.getElementById('profile-sales-month').innerText = "฿ 50,000.00";
+            document.getElementById('profile-commission-month').innerText = "฿ 0.00";
+            document.getElementById('profile-comm-rate').innerText = "Rate: Admin";
+            
+            document.getElementById('menu-settings').classList.remove('hidden');
+            document.getElementById('btn-add-product').classList.remove('hidden');
+            
+            switchView('view-dashboard');
+        }
+
+        function handleLogout() {
+            switchView('view-login');
+            switchTab('tab-profile', document.querySelector('.tab-btn'));
+        }
+
+        function handleAvatarUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const base64Image = e.target.result;
+                document.getElementById('sidebar-avatar').src = base64Image;
+                document.getElementById('profile-avatar').src = base64Image;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function updateBankLogo() {
+            const select = document.getElementById('profile-bank');
+            const logoUrl = select.options[select.selectedIndex].getAttribute('data-logo');
+            if(logoUrl) {
+                const logoImg = document.getElementById('bank-logo-preview');
+                logoImg.src = logoUrl;
+                logoImg.classList.remove('fade-in'); void logoImg.offsetWidth; logoImg.classList.add('fade-in');
+            }
+        }
+
+        // ==========================================
+        // ฟังก์ชันสำหรับผลิตภัณฑ์ใหม่ (สลับ URL/File)
+        // ==========================================
+        function openAddProductModal() { 
+            document.getElementById('modal-add-product').classList.remove('hidden-view'); 
+        }
+        
+        function closeAddProductModal() { 
+            document.getElementById('modal-add-product').classList.add('hidden-view'); 
+            clearInputs('form-add-product'); 
+            // รีเซ็ตการแสดงผลช่องอัปโหลดกลับไปเป็น URL
+            ['present', 'demo', 'price', 'poster'].forEach(type => {
+                const select = document.querySelector(`select[onchange="toggleAttachmentType('${type}', this.value)"]`);
+                if(select) {
+                    select.value = 'url';
+                    toggleAttachmentType(type, 'url');
+                }
+            });
+        }
+
+        function toggleAttachmentType(type, value) {
+            const urlInput = document.getElementById(`prod-${type}-url`);
+            const fileInput = document.getElementById(`prod-${type}-file`);
+            const base64Hidden = document.getElementById(`prod-${type}-base64`);
+
+            if (value === 'url') {
+                urlInput.classList.remove('hidden');
+                fileInput.classList.add('hidden');
+                fileInput.value = ''; 
+                base64Hidden.value = ''; 
+            } else {
+                urlInput.classList.add('hidden');
+                fileInput.classList.remove('hidden');
+                urlInput.value = ''; 
+            }
+        }
+
+        function handleProductFileUpload(type, event) {
+            const file = event.target.files[0];
+            if (!file) {
+                document.getElementById(`prod-${type}-base64`).value = '';
+                return;
+            }
+            if (file.size > 5 * 1024 * 1024) { // จำกัดขนาดไฟล์ 5MB
+                alert('ไฟล์ต้องมีขนาดไม่เกิน 5MB ครับ');
+                event.target.value = '';
+                return;
+            }
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById(`prod-${type}-base64`).value = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function saveNewProduct() {
+            const name = document.getElementById('prod-name').value.trim();
+            const desc = document.getElementById('prod-desc').value.trim();
+            if(!name || !desc) { alert("กรุณากรอกชื่อและรายละเอียดผลิตภัณฑ์ให้ครบถ้วน"); return; }
+            
+            const present = document.getElementById('prod-present-base64').value || document.getElementById('prod-present-url').value.trim() || 'javascript:void(0);';
+            const demo = document.getElementById('prod-demo-base64').value || document.getElementById('prod-demo-url').value.trim() || 'javascript:void(0);';
+            const price = document.getElementById('prod-price-base64').value || document.getElementById('prod-price-url').value.trim() || 'javascript:void(0);';
+            const poster = document.getElementById('prod-poster-base64').value || document.getElementById('prod-poster-url').value.trim() || 'javascript:void(0);';
+            
+            const icons = ['fa-laptop-code', 'fa-server', 'fa-mobile-screen', 'fa-cloud', 'fa-cube'];
+            const randomIcon = icons[Math.floor(Math.random() * icons.length)];
+            
+            const newCard = document.createElement('div');
+            newCard.className = "bg-white rounded-xl shadow-sm p-6 border border-gray-100 hover:shadow-md transition flex flex-col fade-in";
+            newCard.innerHTML = `
+                <div class="w-12 h-12 bg-pastel-light text-pastel-dark rounded-lg flex items-center justify-center text-xl mb-4"><i class="fa-solid ${randomIcon}"></i></div>
+                <h3 class="font-bold text-lg mb-2">${name}</h3><p class="text-gray-600 text-sm mb-4 flex-1">${desc}</p>
+                <span class="text-xs font-bold text-white bg-pastel-dark px-2 py-1 rounded self-start mb-4">รับคอมมิชชั่นตามระดับสมาชิก</span>
+                <div class="grid grid-cols-2 gap-2 border-t border-gray-100 pt-4 mt-auto">
+                    <a href="${present}" target="${present !== 'javascript:void(0);' ? '_blank' : '_self'}" class="flex items-center justify-center text-xs text-blue-600 bg-blue-50 hover:bg-blue-100 px-2 py-2 rounded transition"><i class="fa-solid fa-file-powerpoint mr-1.5"></i> Present</a>
+                    <a href="${demo}" target="${demo !== 'javascript:void(0);' ? '_blank' : '_self'}" class="flex items-center justify-center text-xs text-purple-600 bg-purple-50 hover:bg-purple-100 px-2 py-2 rounded transition"><i class="fa-solid fa-play-circle mr-1.5"></i> Demo</a>
+                    <a href="${price}" target="${price !== 'javascript:void(0);' ? '_blank' : '_self'}" class="flex items-center justify-center text-xs text-green-600 bg-green-50 hover:bg-green-100 px-2 py-2 rounded transition"><i class="fa-solid fa-tags mr-1.5"></i> ราคาแพคเกจ</a>
+                    <a href="${poster}" target="${poster !== 'javascript:void(0);' ? '_blank' : '_self'}" class="flex items-center justify-center text-xs text-orange-600 bg-orange-50 hover:bg-orange-100 px-2 py-2 rounded transition"><i class="fa-solid fa-image mr-1.5"></i> โปสเตอร์</a>
+                </div>`;
+            document.getElementById('product-list').appendChild(newCard);
+            closeAddProductModal();
+        }
+
+        // ==========================================
+        // ฟังก์ชันสำหรับโมดูลลูกค้าของฉัน
+        // ==========================================
+        function openAddCustomerModal() {
+            document.getElementById('modal-add-customer').classList.remove('hidden-view');
+        }
+
+        function closeAddCustomerModal() {
+            document.getElementById('modal-add-customer').classList.add('hidden-view');
+            clearInputs('form-add-customer');
+            document.getElementById('cust-calculated-price').innerText = '฿ 0.00';
+        }
+        
+        // ฟังก์ชันคำนวณราคาอัตโนมัติเมื่อเปลี่ยนจำนวนหน่วย หรือ แพคเกจ
+        function calculateCustomerPrice() {
+            const units = parseInt(document.getElementById('cust-units').value) || 0;
+            const rate = parseFloat(document.getElementById('cust-package').value) || 0;
+            const total = units * rate;
+            
+            // อัปเดตราคาที่แสดงผลใน UI
+            document.getElementById('cust-calculated-price').innerText = new Intl.NumberFormat('th-TH', { style: 'currency', currency: 'THB' }).format(total);
+        }
+
+        function saveNewCustomer() {
+            const company = document.getElementById('cust-company').value.trim();
+            const contactName = document.getElementById('cust-contact-name').value.trim();
+            const phone = document.getElementById('cust-phone').value.trim();
+            const branch = document.getElementById('cust-branch').value.trim();
+            const units = parseInt(document.getElementById('cust-units').value) || 0;
+            const rate = parseFloat(document.getElementById('cust-package').value) || 0;
+            
+            if(!company || !contactName || !phone || !branch || units <= 0) {
+                alert("กรุณากรอกข้อมูลที่มีเครื่องหมาย * ให้ครบถ้วน และระบุจำนวนยูนิตให้ถูกต้อง (มากกว่า 0)");
+                return;
+            }
+            
+            // คำนวณยอดสุทธิ
+            const total = units * rate;
+            const formatTotal = new Intl.NumberFormat('th-TH', { style: 'currency', currency: 'THB' }).format(total);
+
+            // จำลองการเพิ่มลูกค้าลงในตาราง
+            const tableBody = document.getElementById('customer-list-body');
+            const newRow = document.createElement('tr');
+            newRow.className = "border-b hover:bg-gray-50 fade-in";
+
+            newRow.innerHTML = `
+                <td class="px-4 py-3 font-medium text-gray-900">CUST-NEW</td>
+                <td class="px-4 py-3">
+                    <div class="font-bold text-gray-800">${company}</div>
+                    <div class="text-xs text-gray-500"><i class="fa-solid fa-location-dot mr-1"></i> โครงการ: ${branch}</div>
+                </td>
+                <td class="px-4 py-3">
+                    <div>${contactName}</div>
+                    <div class="text-xs text-gray-500"><i class="fa-solid fa-phone mr-1"></i> ${phone}</div>
+                </td>
+                <td class="px-4 py-3 text-center"><span class="bg-blue-100 text-blue-800 text-xs font-bold px-2 py-1 rounded">${units} ยูนิต</span></td>
+                <td class="px-4 py-3 text-right font-bold text-green-600">${formatTotal}</td>
+                <td class="px-4 py-3 text-center">
+                    <button class="text-blue-500 hover:text-blue-700 mx-1" title="แก้ไขข้อมูล"><i class="fa-solid fa-pen-to-square"></i></button>
+                    <button class="text-red-500 hover:text-red-700 mx-1" title="ลบ" onclick="this.closest('tr').remove()"><i class="fa-solid fa-trash"></i></button>
+                </td>
+            `;
+            
+            tableBody.insertBefore(newRow, tableBody.firstChild);
+            closeAddCustomerModal();
+            alert("เพิ่มข้อมูลหน่วยงาน/ลูกค้าสำเร็จ");
+        }
+    </script>
+</body>
+</html>
