@@ -33,7 +33,15 @@
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
-<body class="bg-pastel-light text-pastel-text font-sans antialiased h-screen overflow-hidden flex items-center justify-center">
+<body class="bg-pastel-light text-pastel-text font-sans antialiased h-screen overflow-hidden flex items-center justify-center relative">
+
+    <!-- ==================== FLOATING NOTIFICATION BELL (ADMIN ONLY) ==================== -->
+    <div id="floating-bell" class="hidden fixed top-6 right-6 z-50 animate-bounce cursor-pointer" onclick="openAdminUserTab()">
+        <div class="relative bg-white p-3 rounded-full shadow-lg border border-red-200">
+            <i class="fa-solid fa-bell text-red-500 text-xl"></i>
+            <span id="floating-badge-count" class="absolute -top-1 -right-1 bg-red-600 text-white text-[10px] font-bold w-5 h-5 flex items-center justify-center rounded-full border-2 border-white shadow-sm">0</span>
+        </div>
+    </div>
 
     <!-- ==================== VIEW: LOGIN (หน้าแรก) ==================== -->
     <div id="view-login" class="w-full max-w-md p-6 fade-in">
@@ -51,14 +59,13 @@
                 </div>
                 <div class="mb-6">
                     <label class="block text-sm font-semibold mb-1">Password</label>
-                    <!-- กด Enter เพื่อ Login -->
                     <input type="password" id="login-password" placeholder="กรอกรหัสผ่าน" onkeydown="if(event.key === 'Enter') handleLogin()" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pastel outline-none">
                 </div>
                 <button type="button" onclick="handleLogin()" id="btn-login" class="w-full bg-pastel hover:bg-pastel-dark text-white font-bold py-3 rounded-lg transition duration-300 flex justify-center items-center shadow-md">
                     <i class="fa-solid fa-right-to-bracket mr-2"></i> เข้าสู่ระบบ
                 </button>
                 
-                <!-- ปุ่มลัดเข้า Dashboard (สำหรับทดสอบโดยไม่ต้องใช้ฐานข้อมูลจริง) -->
+                <!-- ปุ่มลัดเข้า Dashboard (สำหรับทดสอบ) -->
                 <button type="button" onclick="bypassToDashboard()" class="w-full mt-3 bg-gray-100 hover:bg-gray-200 text-gray-600 font-bold py-2 rounded-lg transition duration-300 border border-gray-200 text-sm">
                     <i class="fa-solid fa-gauge mr-1"></i> เข้าสู่ Dashboard (โหมดทดสอบ)
                 </button>
@@ -106,7 +113,6 @@
                     <button type="button" onclick="handleRegister()" id="btn-register" class="w-full bg-pastel hover:bg-pastel-dark text-white font-bold py-3 rounded-lg transition duration-300 flex justify-center items-center shadow-md">
                         <i class="fa-solid fa-user-plus mr-2"></i> ยืนยันการสมัคร
                     </button>
-                    <!-- ปุ่มกลับไปหน้า Login -->
                     <button type="button" onclick="switchView('view-login')" class="w-full bg-gray-100 hover:bg-gray-200 text-gray-600 font-bold py-3 rounded-lg transition duration-300 border border-gray-200">
                         <i class="fa-solid fa-arrow-left mr-2"></i> กลับไปหน้าเข้าสู่ระบบ
                     </button>
@@ -118,7 +124,7 @@
     <!-- ==================== VIEW: DASHBOARD ==================== -->
     <div id="view-dashboard" class="w-full h-full hidden-view flex flex-col md:flex-row bg-gray-50">
         <!-- Sidebar -->
-        <div class="w-full md:w-64 bg-pastel-card border-r border-gray-200 shadow-sm flex flex-col">
+        <div class="w-full md:w-64 bg-pastel-card border-r border-gray-200 shadow-sm flex flex-col z-10">
             <div class="p-6 text-center border-b border-gray-100">
                 <div class="relative w-16 h-16 mx-auto mb-3">
                     <img id="sidebar-avatar" src="https://ui-avatars.com/api/?name=Admin&background=aed581&color=fff" class="w-16 h-16 rounded-full object-cover shadow-inner border-2 border-white bg-pastel-light" alt="User Avatar">
@@ -126,7 +132,7 @@
                 <h3 id="dash-username" class="font-bold text-lg">ชื่อผู้ใช้</h3>
                 <span id="dash-level" class="inline-block mt-1 px-3 py-1 bg-pastel-light text-pastel-dark rounded-full text-xs font-semibold">Starter Level</span>
             </div>
-            <nav class="flex-1 p-4">
+            <nav class="flex-1 p-4 overflow-y-auto">
                 <ul class="space-y-2">
                     <li>
                         <a href="javascript:void(0);" onclick="switchTab('tab-profile', this)" class="tab-btn flex items-center px-4 py-3 bg-pastel text-white rounded-lg transition-colors font-medium">
@@ -153,9 +159,10 @@
                             <i class="fa-solid fa-receipt w-6"></i> ใบเสร็จรับเงิน (ชั่วคราว)
                         </a>
                     </li>
-                    <li id="menu-settings" class="hidden">
+                    <li id="menu-settings" class="hidden relative">
                         <a href="javascript:void(0);" onclick="switchTab('tab-settings', this)" class="tab-btn flex items-center px-4 py-3 text-red-500 hover:bg-red-50 rounded-lg transition-colors font-medium">
                             <i class="fa-solid fa-gear w-6"></i> ตั้งค่าระบบ
+                            <span id="nav-badge-pending" class="absolute right-3 top-1/2 transform -translate-y-1/2 bg-red-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full hidden">0</span>
                         </a>
                     </li>
                 </ul>
@@ -168,7 +175,7 @@
         </div>
 
         <!-- Main Content -->
-        <div class="flex-1 overflow-y-auto p-6 md:p-10 bg-pastel-light">
+        <div class="flex-1 overflow-y-auto p-6 md:p-10 bg-pastel-light relative">
             
             <!-- Tab: Profile -->
             <div id="tab-profile" class="tab-content fade-in">
@@ -203,26 +210,21 @@
                         
                         <!-- ส่วน Dashboard ยอดขาย และ คอมมิชชั่น -->
                         <div id="profile-sales-dashboard" class="md:col-span-2 flex flex-col gap-4 mb-2">
-                            <!-- เพิ่ม grid เป็น 3 คอลัมน์ -->
                             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                <!-- ยอดขายเดือนนี้ -->
                                 <div class="bg-blue-50 p-5 rounded-xl border border-blue-100 shadow-sm flex flex-col justify-center items-center text-center">
                                     <p class="text-sm text-blue-600 font-bold mb-1"><i class="fa-solid fa-calendar-day mr-1"></i> ยอดขายเดือนนี้</p>
                                     <p id="profile-sales-month" class="font-bold text-2xl lg:text-3xl text-blue-700">฿ 0.00</p>
                                 </div>
-                                <!-- ค่าคอมมิชชั่นที่ได้รับ -->
                                 <div class="bg-purple-50 p-5 rounded-xl border border-purple-100 shadow-sm flex flex-col justify-center items-center text-center relative overflow-hidden">
                                     <div class="absolute top-0 right-0 bg-purple-200 text-purple-700 text-[10px] font-bold px-2 py-1 rounded-bl-lg" id="profile-comm-rate">Rate: 10%</div>
                                     <p class="text-sm text-purple-600 font-bold mb-1"><i class="fa-solid fa-hand-holding-dollar mr-1"></i> คอมมิชชั่นเดือนนี้</p>
                                     <p id="profile-commission-month" class="font-bold text-2xl lg:text-3xl text-purple-700">฿ 0.00</p>
                                 </div>
-                                <!-- ยอดขายสะสม -->
                                 <div class="bg-green-50 p-5 rounded-xl border border-green-100 shadow-sm flex flex-col justify-center items-center text-center">
                                     <p class="text-sm text-green-600 font-bold mb-1"><i class="fa-solid fa-chart-line mr-1"></i> ยอดขายสะสมทั้งหมด</p>
                                     <p id="profile-sales-total" class="font-bold text-2xl lg:text-3xl text-green-700">฿ 0.00</p>
                                 </div>
                             </div>
-                            <!-- หลอดพลัง -->
                             <div class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm">
                                 <div class="flex justify-between items-end mb-2">
                                     <p class="text-sm text-gray-600 font-bold">ความคืบหน้าสู่ระดับถัดไป</p>
@@ -266,7 +268,7 @@
                                             <option value="bbl" data-logo="https://ui-avatars.com/api/?name=B&background=1E4598&color=fff&font-size=0.6">ธนาคารกรุงเทพ (BBL)</option>
                                             <option value="ktb" data-logo="https://ui-avatars.com/api/?name=K&background=00AEEF&color=fff&font-size=0.6">ธนาคารกรุงไทย (KTB)</option>
                                             <option value="ttb" data-logo="https://ui-avatars.com/api/?name=T&background=0050f0&color=fff&font-size=0.6">ธนาคารทหารไทยธนชาต (TTB)</option>
-                                            <option value="bay" data-logo="https://ui-avatars.com/api/?name=B&background=F7C800&color=fff&font-size=0.6">ธนาคารกรศรีอยุธยา (BAY)</option>
+                                            <option value="bay" data-logo="https://ui-avatars.com/api/?name=B&background=F7C800&color=fff&font-size=0.6">ธนาคารกรุงศรีอยุธยา (BAY)</option>
                                             <option value="gsb" data-logo="https://ui-avatars.com/api/?name=G&background=EB198D&color=fff&font-size=0.6">ธนาคารออมสิน (GSB)</option>
                                         </select>
                                     </div>
@@ -334,23 +336,6 @@
                                         <button class="text-red-500 hover:text-red-700 mx-1" title="ลบ"><i class="fa-solid fa-trash"></i></button>
                                     </td>
                                 </tr>
-                                <tr class="border-b hover:bg-gray-50">
-                                    <td class="px-4 py-3 font-medium text-gray-900">CUST-002</td>
-                                    <td class="px-4 py-3">
-                                        <div class="font-bold text-gray-800">หมู่บ้าน แฮปปี้โฮม</div>
-                                        <div class="text-xs text-gray-500">โครงการ: เฟส 2</div>
-                                    </td>
-                                    <td class="px-4 py-3">
-                                        <div>นิติบุคคล</div>
-                                        <div class="text-xs text-gray-500">02-987-6543</div>
-                                    </td>
-                                    <td class="px-4 py-3 text-center"><span class="bg-purple-100 text-purple-800 text-xs font-bold px-2 py-1 rounded">50 หลัง</span></td>
-                                    <td class="px-4 py-3 text-right font-bold text-green-600">฿ 1,500.00</td>
-                                    <td class="px-4 py-3 text-center">
-                                        <button class="text-blue-500 hover:text-blue-700 mx-1" title="แก้ไขข้อมูล"><i class="fa-solid fa-pen-to-square"></i></button>
-                                        <button class="text-red-500 hover:text-red-700 mx-1" title="ลบ"><i class="fa-solid fa-trash"></i></button>
-                                    </td>
-                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -366,38 +351,12 @@
                     </button>
                 </div>
                 <div id="product-list" class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl">
-                    <!-- การ์ดที่ 1 -->
                     <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100 hover:shadow-md transition flex flex-col">
                         <div class="w-12 h-12 bg-pastel-light text-pastel-dark rounded-lg flex items-center justify-center text-xl mb-4">
                             <i class="fa-solid fa-cash-register"></i>
                         </div>
                         <h3 class="font-bold text-lg mb-2">Pixcel POS System</h3>
                         <p class="text-gray-600 text-sm mb-4 flex-1">ระบบจัดการหน้าร้าน ยอดขาย สต็อกสินค้า เหมาะสำหรับร้านค้าปลีก ใช้งานง่ายผ่าน Cloud</p>
-                        <span class="text-xs font-bold text-white bg-pastel-dark px-2 py-1 rounded self-start mb-4">รับคอมมิชชั่นตามระดับสมาชิก</span>
-                        
-                        <div class="grid grid-cols-2 gap-2 border-t border-gray-100 pt-4 mt-auto">
-                            <a href="javascript:void(0);" class="flex items-center justify-center text-xs text-blue-600 bg-blue-50 hover:bg-blue-100 px-2 py-2 rounded transition">
-                                <i class="fa-solid fa-file-powerpoint mr-1.5"></i> Present
-                            </a>
-                            <a href="javascript:void(0);" class="flex items-center justify-center text-xs text-purple-600 bg-purple-50 hover:bg-purple-100 px-2 py-2 rounded transition">
-                                <i class="fa-solid fa-play-circle mr-1.5"></i> Demo
-                            </a>
-                            <a href="javascript:void(0);" class="flex items-center justify-center text-xs text-green-600 bg-green-50 hover:bg-green-100 px-2 py-2 rounded transition">
-                                <i class="fa-solid fa-tags mr-1.5"></i> ราคาแพคเกจ
-                            </a>
-                            <a href="javascript:void(0);" class="flex items-center justify-center text-xs text-orange-600 bg-orange-50 hover:bg-orange-100 px-2 py-2 rounded transition">
-                                <i class="fa-solid fa-image mr-1.5"></i> โปสเตอร์
-                            </a>
-                        </div>
-                    </div>
-                    
-                    <!-- การ์ดที่ 2 -->
-                    <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100 hover:shadow-md transition flex flex-col">
-                        <div class="w-12 h-12 bg-pastel-light text-pastel-dark rounded-lg flex items-center justify-center text-xl mb-4">
-                            <i class="fa-solid fa-chart-line"></i>
-                        </div>
-                        <h3 class="font-bold text-lg mb-2">Pixcel CRM & ERP</h3>
-                        <p class="text-gray-600 text-sm mb-4 flex-1">ระบบจัดการความสัมพันธ์ลูกค้าและบริหารองค์กร ครบจบในระบบเดียว สำหรับองค์กรขนาดกลาง</p>
                         <span class="text-xs font-bold text-white bg-pastel-dark px-2 py-1 rounded self-start mb-4">รับคอมมิชชั่นตามระดับสมาชิก</span>
                         
                         <div class="grid grid-cols-2 gap-2 border-t border-gray-100 pt-4 mt-auto">
@@ -537,8 +496,6 @@
                 <div class="bg-white rounded-xl shadow-sm p-6 max-w-4xl border border-gray-100 min-h-[400px]">
                     <!-- ส่วน 1: ข้อมูลบริษัท -->
                     <div id="setting-company" class="setting-content fade-in">
-                        
-                        <!-- ช่องเชื่อมต่อ Google Sheet ID -->
                         <div class="mb-8 p-5 bg-red-50 rounded-xl border border-red-200 shadow-sm">
                             <h3 class="font-bold text-lg mb-2 text-red-800"><i class="fa-solid fa-database mr-2"></i>ตั้งค่าฐานข้อมูล (Google Sheet ID)</h3>
                             <p class="text-sm text-red-600 mb-4">หากต้องการเปลี่ยน Database ให้สร้าง Google Sheet ใหม่แล้วเอา <b>Sheet ID</b> มาวางที่นี่ครับ</p>
@@ -554,7 +511,6 @@
 
                         <h3 class="font-bold text-lg mb-4 text-gray-800 border-b pb-2">การตั้งค่าเริ่มต้นของระบบ</h3>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                            <!-- Logo -->
                             <div class="md:col-span-2 flex items-center gap-4">
                                 <div id="company-logo-preview" class="w-20 h-20 bg-gray-50 rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center text-gray-400 overflow-hidden">
                                     <i class="fa-solid fa-image text-2xl"></i>
@@ -566,31 +522,25 @@
                                 </div>
                             </div>
                             
-                            <!-- ชื่อบริษัท -->
                             <div>
                                 <label class="block text-sm font-semibold mb-1 text-gray-600">ชื่อบริษัท</label>
                                 <input type="text" id="comp-name" placeholder="ระบุชื่อบริษัท" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pastel outline-none">
                             </div>
-                            
-                            <!-- เลขประจำตัวผู้เสียภาษี -->
                             <div>
                                 <label class="block text-sm font-semibold mb-1 text-gray-600">เลขประจำตัวผู้เสียภาษี (13 หลัก)</label>
                                 <input type="text" id="comp-tax" placeholder="ระบุเลขผู้เสียภาษี" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pastel outline-none">
                             </div>
 
-                            <!-- ที่อยู่ -->
                             <div class="md:col-span-2">
                                 <label class="block text-sm font-semibold mb-1 text-gray-600">ที่อยู่บริษัท</label>
                                 <textarea id="comp-address" rows="2" placeholder="ระบุที่อยู่บริษัท" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pastel outline-none"></textarea>
                             </div>
                             
-                            <!-- เบอร์โทรติดต่อ -->
                             <div>
                                 <label class="block text-sm font-semibold mb-1 text-gray-600">เบอร์โทรติดต่อ</label>
                                 <input type="tel" id="comp-phone" placeholder="ระบุเบอร์โทรศัพท์" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pastel outline-none">
                             </div>
 
-                            <!-- Website -->
                             <div>
                                 <label class="block text-sm font-semibold mb-1 text-gray-600">เว็บไซต์ (Website)</label>
                                 <input type="url" id="comp-website" placeholder="https://www.example.com" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pastel outline-none">
@@ -605,27 +555,24 @@
 
                     <!-- ส่วน 2: จัดการผู้ใช้งาน -->
                     <div id="setting-users" class="setting-content hidden-view fade-in">
-                        <h3 class="font-bold text-lg mb-4 text-gray-800 border-b pb-2">จัดการผู้ใช้งาน (รอยืนยัน)</h3>
+                        <div class="flex justify-between items-center mb-4 border-b pb-2">
+                            <h3 class="font-bold text-lg text-gray-800">จัดการผู้ใช้งานในระบบ</h3>
+                            <button onclick="loadAdminData()" class="text-sm bg-gray-100 hover:bg-gray-200 text-gray-600 font-bold py-1 px-3 rounded transition shadow-sm flex items-center">
+                                <i class="fa-solid fa-rotate-right mr-1"></i> รีเฟรช
+                            </button>
+                        </div>
                         <div class="overflow-x-auto mb-8">
                             <table class="w-full text-sm text-left text-gray-500">
                                 <thead class="text-xs text-gray-700 uppercase bg-pastel-light">
                                     <tr>
                                         <th class="px-4 py-3 rounded-tl-lg">ID</th>
-                                        <th class="px-4 py-3">ชื่อ - นามสกุล</th>
+                                        <th class="px-4 py-3">ชื่อ - ข้อมูลติดต่อ</th>
                                         <th class="px-4 py-3">สถานะ</th>
                                         <th class="px-4 py-3 rounded-tr-lg text-center">จัดการ</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    <tr class="border-b">
-                                        <td class="px-4 py-3 font-medium text-gray-900">pc-2026-002</td>
-                                        <td class="px-4 py-3">สมชาย ตัวอย่าง</td>
-                                        <td class="px-4 py-3"><span class="bg-yellow-100 text-yellow-800 text-xs font-bold px-2 py-1 rounded">Pending</span></td>
-                                        <td class="px-4 py-3 text-center">
-                                            <button class="text-white bg-pastel hover:bg-pastel-dark px-3 py-1 rounded text-xs font-bold transition shadow-sm">อนุมัติ</button>
-                                            <button class="text-white bg-red-400 hover:bg-red-500 px-3 py-1 rounded text-xs font-bold transition shadow-sm ml-1">ปฏิเสธ</button>
-                                        </td>
-                                    </tr>
+                                <tbody id="admin-user-list-body">
+                                    <tr><td colspan="4" class="text-center py-4 text-gray-500">กำลังโหลดข้อมูล...</td></tr>
                                 </tbody>
                             </table>
                         </div>
@@ -743,7 +690,7 @@
                                         <td class="px-4 py-3 text-center"><button class="text-gray-400 hover:text-red-500" title="ลบรายการนี้" onclick="this.closest('tr').remove()"><i class="fa-solid fa-trash"></i></button></td>
                                     </tr>
                                     
-                                    <!-- แถวสำหรับ POS (ซ่อนไว้ก่อนเพราะ default คือ crm) -->
+                                    <!-- แถวสำหรับ POS -->
                                     <tr class="border-b hover:bg-gray-50 package-row hidden" data-product="pos">
                                         <td class="px-4 py-3 text-center"><input type="number" value="1" class="w-16 px-2 py-1 border border-gray-200 rounded focus:ring-1 focus:ring-pastel outline-none text-center"></td>
                                         <td class="px-4 py-3">
@@ -943,80 +890,11 @@
                 const sheetInput = document.getElementById('setting-sheet-id');
                 if(sheetInput) sheetInput.value = savedSheetId;
             }
-            // โหลดข้อมูลบริษัทที่บันทึกไว้ขึ้นมาแสดง (ถ้ามี)
             loadCompanySettings();
         });
 
         // ==========================================
-        // ฟังก์ชันสำหรับตั้งค่าบริษัท
-        // ==========================================
-        function handleCompanyLogoUpload(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-            if (file.size > 2 * 1024 * 1024) { 
-                alert('ไฟล์รูปภาพต้องมีขนาดไม่เกิน 2MB'); 
-                event.target.value = ''; 
-                return; 
-            }
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const base64Image = e.target.result;
-                const previewContainer = document.getElementById('company-logo-preview');
-                previewContainer.innerHTML = `<img src="${base64Image}" class="w-full h-full object-cover">`;
-                // บันทึกลง LocalStorage
-                localStorage.setItem('pixcel_company_logo', base64Image);
-            };
-            reader.readAsDataURL(file);
-        }
-
-        function saveCompanySettings(btn) {
-            // ดึงข้อมูลจากฟอร์ม
-            const data = {
-                name: document.getElementById('comp-name').value,
-                tax: document.getElementById('comp-tax').value,
-                address: document.getElementById('comp-address').value,
-                phone: document.getElementById('comp-phone').value,
-                website: document.getElementById('comp-website').value
-            };
-            // บันทึกลง LocalStorage (สำหรับการจำลองข้อมูล)
-            localStorage.setItem('pixcel_company_settings', JSON.stringify(data));
-            
-            // เปลี่ยนสถานะปุ่มเพื่อแจ้งเตือน
-            const originalText = btn.innerHTML;
-            btn.innerHTML = '<i class="fa-solid fa-check mr-2"></i> บันทึกสำเร็จ!';
-            btn.classList.add('bg-green-500');
-            btn.classList.remove('bg-pastel', 'hover:bg-pastel-dark');
-            
-            // หน่วงเวลาคืนค่าปุ่มเดิม
-            setTimeout(() => { 
-                btn.innerHTML = originalText; 
-                btn.classList.remove('bg-green-500');
-                btn.classList.add('bg-pastel', 'hover:bg-pastel-dark');
-            }, 2000);
-        }
-
-        function loadCompanySettings() {
-            // โหลดโลโก้
-            const savedLogo = localStorage.getItem('pixcel_company_logo');
-            if (savedLogo) {
-                const previewContainer = document.getElementById('company-logo-preview');
-                if(previewContainer) previewContainer.innerHTML = `<img src="${savedLogo}" class="w-full h-full object-cover">`;
-            }
-            
-            // โหลดข้อมูลบริษัท
-            const savedSettingsStr = localStorage.getItem('pixcel_company_settings');
-            if(savedSettingsStr) {
-                try {
-                    const data = JSON.parse(savedSettingsStr);
-                    if(document.getElementById('comp-name')) document.getElementById('comp-name').value = data.name || '';
-                    if(document.getElementById('comp-tax')) document.getElementById('comp-tax').value = data.tax || '';
-                    if(document.getElementById('comp-address')) document.getElementById('comp-address').value = data.address || '';
-                    if(document.getElementById('comp-phone')) document.getElementById('comp-phone').value = data.phone || '';
-                    if(document.getElementById('comp-website')) document.getElementById('comp-website').value = data.website || '';
-                } catch(e){}
-            }
-        }
-
+        // ฟังก์ชันช่วยเหลือ UI ทั่วไป
         // ==========================================
         function saveSheetId() {
             const sheetId = document.getElementById('setting-sheet-id').value.trim();
@@ -1029,12 +907,8 @@
             if (!container) return;
             const inputs = container.querySelectorAll('input, textarea, select');
             inputs.forEach(input => {
-                if (input.type === 'checkbox' || input.type === 'radio') {
-                    input.checked = false;
-                } else if(input.tagName.toLowerCase() !== 'select') {
-                    // ละเว้น Select ไว้เคลียร์แยกกัน
-                    input.value = '';
-                }
+                if (input.type === 'checkbox' || input.type === 'radio') input.checked = false;
+                else if(input.tagName.toLowerCase() !== 'select') input.value = '';
             });
         }
 
@@ -1078,51 +952,17 @@
             if(element) {
                 element.className = "setting-tab-btn flex items-center px-4 py-2 text-sm font-bold text-pastel-dark border-b-2 border-pastel focus:outline-none transition-colors";
             }
+            if(tabId === 'setting-users') loadAdminData();
+        }
+        
+        function openAdminUserTab() {
+            switchTab('tab-settings', document.getElementById('menu-settings').querySelector('a'));
+            const userTabBtn = document.querySelectorAll('.setting-tab-btn')[1];
+            switchSettingTab('setting-users', userTabBtn);
         }
 
         // ==========================================
-        // ฟังก์ชันสำหรับแท็บ ตั้งค่าราคาแพคเกจ
-        // ==========================================
-        function filterPackages() {
-            const selectedProduct = document.getElementById('package-product-selector').value;
-            const rows = document.querySelectorAll('.package-row');
-            rows.forEach(row => {
-                if(row.getAttribute('data-product') === selectedProduct) {
-                    row.classList.remove('hidden');
-                } else {
-                    row.classList.add('hidden');
-                }
-            });
-        }
-
-        function addPackageRow() {
-            const selectedProduct = document.getElementById('package-product-selector').value;
-            const tbody = document.getElementById('package-list-body');
-            
-            // นับแถวปัจจุบันเพื่อใส่ลำดับเริ่มต้น
-            const visibleRows = Array.from(tbody.querySelectorAll('.package-row')).filter(r => r.getAttribute('data-product') === selectedProduct);
-            const nextSeq = visibleRows.length + 1;
-
-            const tr = document.createElement('tr');
-            tr.className = "border-b hover:bg-gray-50 package-row fade-in";
-            tr.setAttribute('data-product', selectedProduct);
-            tr.innerHTML = `
-                <td class="px-4 py-3 text-center"><input type="number" value="${nextSeq}" class="w-16 px-2 py-1 border border-gray-200 rounded focus:ring-1 focus:ring-pastel outline-none text-center"></td>
-                <td class="px-4 py-3">
-                    <div class="flex items-center justify-center gap-2">
-                        <input type="number" value="" placeholder="เริ่มต้น" class="w-24 px-2 py-1 border border-gray-200 rounded focus:ring-1 focus:ring-pastel outline-none text-center">
-                        <span class="text-gray-400">ถึง</span>
-                        <input type="number" value="" placeholder="สูงสุด" class="w-24 px-2 py-1 border border-gray-200 rounded focus:ring-1 focus:ring-pastel outline-none text-center">
-                    </div>
-                </td>
-                <td class="px-4 py-3 text-right"><input type="number" value="" class="w-full max-w-[120px] px-2 py-1 border border-gray-200 rounded focus:ring-1 focus:ring-pastel outline-none text-right ml-auto"></td>
-                <td class="px-4 py-3 text-center"><button class="text-gray-400 hover:text-red-500" title="ลบรายการนี้" onclick="this.closest('tr').remove()"><i class="fa-solid fa-trash"></i></button></td>
-            `;
-            tbody.appendChild(tr);
-        }
-
-        // ==========================================
-        // เชื่อมต่อ Backend สำหรับการสมัครสมาชิกและเข้าสู่ระบบ
+        // เชื่อมต่อ Backend (GAS)
         // ==========================================
         function callBackend(funcName, ...args) {
             return new Promise((resolve, reject) => {
@@ -1131,17 +971,13 @@
                         .withSuccessHandler(resolve)
                         .withFailureHandler(reject);
                     
-                    if (funcName === 'registerAgent') {
-                        runner.registerAgent(args[0], args[1]);
-                    } else if (funcName === 'loginAgent') {
-                        runner.loginAgent(args[0], args[1], args[2]);
-                    }
+                    if (funcName === 'registerAgent') runner.registerAgent(args[0], args[1]);
+                    else if (funcName === 'loginAgent') runner.loginAgent(args[0], args[1], args[2]);
+                    else if (funcName === 'getAdminDashboardData') runner.getAdminDashboardData(args[0]);
+                    else if (funcName === 'approveAgent') runner.approveAgent(args[0], args[1]);
+                    else if (funcName === 'rejectAgent') runner.rejectAgent(args[0], args[1]);
                 } else {
-                    // ⚠️ เพิ่มการแจ้งเตือนหากเปิดไฟล์ตรงๆ จากคอมพิวเตอร์ ⚠️
-                    if(funcName === 'registerAgent') {
-                        alert("⚠️ คำเตือน: คุณกำลังเปิดไฟล์ HTML โดยตรง ไม่ได้เปิดผ่านลิงก์ของ Google Apps Script!\n\nระบบจะทำงานใน 'โหมดจำลอง' ข้อมูลจะไม่ถูกบันทึกลง Google Sheets ครับ");
-                    }
-                    
+                    // โหมดจำลอง
                     setTimeout(() => {
                         if (funcName === 'registerAgent') {
                             const year = new Date().getFullYear();
@@ -1151,19 +987,173 @@
                             const user = args[0];
                             const pass = args[1];
                             if (user === "admin" && pass === "bosskim") {
-                                resolve({ success: true, data: { id: "SUPER-ADMIN", name: "Boss Kim (ผู้บริหาร)", level: "Super Admin", address: "สำนักงานใหญ่ Pixcel", phone: "-", email: "admin@pixcel.com", salesThisMonth: 0, sales: 0 }});
-                            } else if (user && pass) {
-                                resolve({ success: true, data: { id: "pc-2026-001", name: "ทดสอบ ตัวแทนจำหน่าย", level: "Starter", address: "123 ถ.สุขุมวิท กทม.", phone: "081-234-5678", email: user, salesThisMonth: 5500, sales: 15000 }});
+                                resolve({ success: true, data: { id: "SUPER-ADMIN", name: "Boss Kim", level: "Super Admin", email: "admin@pixcel.com" }});
                             } else {
-                                resolve({ success: false, message: "Username หรือ Password ไม่ถูกต้อง" });
+                                resolve({ success: true, data: { id: "pc-2026-001", name: "ทดสอบ ตัวแทน", level: "Starter", email: user, address: "123 กทม.", phone: "0801234567", salesThisMonth: 5500, sales: 15000 }});
                             }
+                        } else if (funcName === 'getAdminDashboardData') {
+                            resolve({
+                                success: true, 
+                                users: [
+                                    { id: 'pc-2026-002', name: 'นายทดสอบ รออนุมัติ', status: 'Pending', email: 'test@mail.com', phone: '0811111111' },
+                                    { id: 'pc-2026-001', name: 'ทดสอบ ตัวแทนจำหน่าย', status: 'Approved', email: 'demo@mail.com', phone: '0822222222' }
+                                ]
+                            });
+                        } else if (funcName === 'approveAgent' || funcName === 'rejectAgent') {
+                            resolve({ success: true });
                         }
-                    }, 1000);
+                    }, 800);
                 }
             });
         }
 
-        // === ฟังก์ชัน จัดการ Login และแสดงผล Dashboard ===
+        // === โหลดและแสดงผลตารางฝั่ง Admin ===
+        async function loadAdminData() {
+            const sheetId = localStorage.getItem('pixcel_sheet_id') || '';
+            const tbody = document.getElementById('admin-user-list-body');
+            tbody.innerHTML = '<tr><td colspan="4" class="text-center py-4"><i class="fa-solid fa-spinner fa-spin text-pastel-dark"></i> กำลังโหลดข้อมูล...</td></tr>';
+            
+            try {
+                const result = await callBackend('getAdminDashboardData', sheetId);
+                if (result && result.success) {
+                    renderAdminUserTable(result.users || []);
+                } else {
+                    tbody.innerHTML = `<tr><td colspan="4" class="text-center py-4 text-red-500">${result ? result.message : 'โหลดข้อมูลล้มเหลว'}</td></tr>`;
+                }
+            } catch (e) {
+                tbody.innerHTML = '<tr><td colspan="4" class="text-center py-4 text-red-500">เกิดข้อผิดพลาดในการเชื่อมต่อ</td></tr>';
+            }
+        }
+
+        function renderAdminUserTable(users) {
+            const tbody = document.getElementById('admin-user-list-body');
+            tbody.innerHTML = '';
+            let pendingCount = 0;
+            
+            if (users.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" class="text-center py-4 text-gray-500">ยังไม่มีผู้ใช้งานในระบบ</td></tr>';
+            } else {
+                users.forEach(u => {
+                    if(u.id === "SUPER-ADMIN") return;
+                    if (u.status === 'Pending') pendingCount++;
+                    
+                    let statusBadge = u.status === 'Pending' ? 
+                        `<span class="bg-yellow-100 text-yellow-800 text-xs font-bold px-2 py-1 rounded">รออนุมัติ</span>` : 
+                        `<span class="bg-green-100 text-green-800 text-xs font-bold px-2 py-1 rounded">อนุมัติแล้ว</span>`;
+                    
+                    let actionBtns = u.status === 'Pending' ? `
+                        <button onclick="handleApprove('${u.id}')" class="text-white bg-pastel hover:bg-pastel-dark px-3 py-1 rounded text-xs font-bold transition shadow-sm mx-0.5">อนุมัติ</button>
+                        <button onclick="handleReject('${u.id}')" class="text-white bg-red-400 hover:bg-red-500 px-3 py-1 rounded text-xs font-bold transition shadow-sm mx-0.5">ปฏิเสธ</button>
+                    ` : `<span class="text-gray-400 text-xs">จัดการแล้ว</span>`;
+
+                    const tr = document.createElement('tr');
+                    tr.className = 'border-b hover:bg-gray-50';
+                    tr.innerHTML = `
+                        <td class="px-4 py-3 font-medium text-gray-900">${u.id}</td>
+                        <td class="px-4 py-3">
+                            <div class="font-bold text-gray-800">${u.name}</div>
+                            <div class="text-xs text-gray-500"><i class="fa-solid fa-envelope mr-1"></i>${u.email} <br><i class="fa-solid fa-phone mr-1"></i>${u.phone || '-'}</div>
+                        </td>
+                        <td class="px-4 py-3">${statusBadge}</td>
+                        <td class="px-4 py-3 text-center">${actionBtns}</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            }
+            
+            // อัปเดตกระดิ่งแจ้งเตือน
+            const navBadge = document.getElementById('nav-badge-pending');
+            const floatBell = document.getElementById('floating-bell');
+            const floatCount = document.getElementById('floating-badge-count');
+            
+            if (pendingCount > 0) {
+                navBadge.innerText = pendingCount;
+                navBadge.classList.remove('hidden');
+                floatCount.innerText = pendingCount;
+                floatBell.classList.remove('hidden');
+            } else {
+                navBadge.classList.add('hidden');
+                floatBell.classList.add('hidden');
+            }
+        }
+
+        async function handleApprove(id) {
+            if(!confirm(`ต้องการ 'อนุมัติ' ผู้ใช้งานรหัส ${id} ใช่หรือไม่?\n(ระบบจะสุ่มรหัสผ่านและส่งอีเมลให้ผู้ใช้)`)) return;
+            const sheetId = localStorage.getItem('pixcel_sheet_id') || '';
+            try {
+                const res = await callBackend('approveAgent', id, sheetId);
+                if(res && res.success) { 
+                    if(res.emailError) {
+                        alert("✅ อนุมัติสำเร็จ! แต่ส่งอีเมลไม่ได้: " + res.emailError + "\n\n⚠️ กรุณาตั้งค่าสิทธิ์ Gmail ในหน้า Google Apps Script ครับ");
+                    } else {
+                        alert("✅ อนุมัติและส่งอีเมลแจ้งรหัสผ่านสำเร็จ!"); 
+                    }
+                    loadAdminData(); 
+                }
+                else { alert("❌ ผิดพลาด: " + res.message); }
+            } catch(e) { alert("ล้มเหลวในการเชื่อมต่อ"); }
+        }
+
+        async function handleReject(id) {
+            if(!confirm(`ต้องการ 'ปฏิเสธและลบ' ผู้ใช้งานรหัส ${id} ใช่หรือไม่?`)) return;
+            const sheetId = localStorage.getItem('pixcel_sheet_id') || '';
+            try {
+                const res = await callBackend('rejectAgent', id, sheetId);
+                if(res && res.success) { alert("ลบข้อมูลสำเร็จ!"); loadAdminData(); }
+                else { alert("ผิดพลาด: " + res.message); }
+            } catch(e) { alert("ล้มเหลว"); }
+        }
+
+        // === ฟังก์ชัน สมัครสมาชิก (แก้ไขให้ดึงข้อมูลครบถ้วน 100%) ===
+        async function handleRegister() {
+            // ดึงข้อมูลให้ชัวร์
+            const nameInput = document.getElementById('reg-name').value.trim();
+            const addressInput = document.getElementById('reg-address').value.trim();
+            const phoneInput = document.getElementById('reg-phone').value.trim();
+            const emailInput = document.getElementById('reg-email').value.trim();
+
+            if(!nameInput || !addressInput || !phoneInput || !emailInput) {
+                alert("กรุณากรอกข้อมูลให้ครบถ้วนก่อนยืนยันการสมัคร");
+                return;
+            }
+
+            const btn = document.getElementById('btn-register');
+            const msgBox = document.getElementById('reg-message');
+            
+            msgBox.classList.add('hidden');
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> กำลังดำเนินการ...';
+            btn.disabled = true;
+
+            const data = { name: nameInput, address: addressInput, phone: phoneInput, email: emailInput };
+            const sheetId = localStorage.getItem('pixcel_sheet_id') || '';
+
+            try {
+                const result = await callBackend('registerAgent', data, sheetId);
+                if(result && result.success) {
+                    msgBox.className = "mt-4 text-center p-5 bg-green-50 text-green-800 rounded-lg border border-green-200 font-medium fade-in shadow-sm";
+                    const successText = result.message === "ลงทะเบียนสำเร็จ รอแอดมินอนุมัติ" ? "(ข้อมูลจำลอง)" : "";
+                    msgBox.innerHTML = `
+                        <i class="fa-solid fa-circle-check text-4xl mb-3 text-green-500"></i><br>
+                        <span class="text-lg font-bold">สมัครสมาชิกสำเร็จ! ${successText}</span><br>
+                        รหัสตัวแทนของคุณคือ: <b class="text-xl text-green-700">${result.id}</b><br>
+                        <span class="text-sm mt-3 block text-gray-600 bg-white p-2 rounded">โปรดรอ Admin ยืนยันระบบ</span>
+                    `;
+                    msgBox.classList.remove('hidden');
+                    clearInputs('form-register');
+                    btn.classList.add('hidden'); 
+                } else {
+                    alert("ข้อผิดพลาด: " + (result ? result.message : 'ไม่ทราบสาเหตุ'));
+                    btn.innerHTML = '<i class="fa-solid fa-user-plus mr-2"></i> ยืนยันการสมัคร';
+                    btn.disabled = false;
+                }
+            } catch (error) {
+                alert("การเชื่อมต่อล้มเหลว กรุณาลองใหม่อีกครั้ง");
+                btn.innerHTML = '<i class="fa-solid fa-user-plus mr-2"></i> ยืนยันการสมัคร';
+                btn.disabled = false;
+            }
+        }
+
+        // === ฟังก์ชัน Login ===
         async function handleLogin() {
             const user = document.getElementById('login-username').value.trim();
             const pass = document.getElementById('login-password').value.trim();
@@ -1184,16 +1174,15 @@
                 if(result && result.success) {
                     const d = result.data;
                     document.getElementById('dash-username').innerText = d.name.split(' ')[0];
-                    
-                    // จัดการข้อมูลแสดงผลพื้นฐาน
                     document.getElementById('profile-id').innerText = d.id;
                     document.getElementById('profile-name').innerText = d.name;
-                    document.getElementById('profile-address').innerText = d.address || '-';
-                    document.getElementById('profile-phone').innerText = d.phone || '-';
-                    document.getElementById('profile-email').innerText = d.email || '-';
+                    
+                    // ป้องกันค่าว่างแสดงเป็นขีด
+                    document.getElementById('profile-address').innerText = (d.address && d.address !== "undefined") ? d.address : '-';
+                    document.getElementById('profile-phone').innerText = (d.phone && d.phone !== "undefined") ? d.phone : '-';
+                    document.getElementById('profile-email').innerText = (d.email && d.email !== "undefined") ? d.email : '-';
 
-                    // กำหนดค่า % คอมมิชชั่นตามระดับ
-                    let commRate = 0.10; // Starter Default 10%
+                    let commRate = 0.10; 
                     if (d.level === 'Silver') commRate = 0.15;
                     if (d.level === 'Gold') commRate = 0.20;
                     if (d.level === 'VIP') commRate = 0.25;
@@ -1208,13 +1197,13 @@
                         document.getElementById('menu-settings').classList.remove('hidden');
                         document.getElementById('btn-add-product').classList.remove('hidden');
                         
-                        // แสดง Dashboard แม้เป็น Admin แต่จะเป็น 0
-                        document.getElementById('profile-sales-dashboard').classList.remove('hidden');
+                        document.getElementById('profile-sales-dashboard').classList.add('hidden');
                         document.getElementById('profile-sales-total').innerText = "฿ 0.00";
                         document.getElementById('profile-sales-month').innerText = "฿ 0.00";
                         document.getElementById('profile-commission-month').innerText = "฿ 0.00";
                         document.getElementById('profile-comm-rate').innerText = "Rate: N/A";
                         
+                        loadAdminData(); // โหลดกระดิ่งแจ้งเตือน
                     } else {
                         document.getElementById('dash-level').className = "inline-block mt-1 px-3 py-1 bg-pastel-light text-pastel-dark rounded-full text-xs font-semibold";
                         document.getElementById('dash-level').innerText = d.level;
@@ -1224,8 +1213,8 @@
                         
                         document.getElementById('menu-settings').classList.add('hidden');
                         document.getElementById('btn-add-product').classList.add('hidden');
+                        document.getElementById('floating-bell').classList.add('hidden');
                         
-                        // แสดง Dashboard ยอดขายสำหรับ User ทั่วไป
                         document.getElementById('profile-sales-dashboard').classList.remove('hidden');
                         
                         const salesMonth = d.salesThisMonth || 0;
@@ -1258,57 +1247,6 @@
             }
         }
 
-        // === ฟังก์ชัน จัดการสมัครสมาชิก ===
-        async function handleRegister() {
-            const nameInput = document.getElementById('reg-name').value.trim();
-            const addressInput = document.getElementById('reg-address').value.trim();
-            const phoneInput = document.getElementById('reg-phone').value.trim();
-            const emailInput = document.getElementById('reg-email').value.trim();
-
-            if(!nameInput || !addressInput || !phoneInput || !emailInput) {
-                alert("กรุณากรอกข้อมูลให้ครบถ้วนก่อนยืนยันการสมัคร");
-                return;
-            }
-
-            const btn = document.getElementById('btn-register');
-            const msgBox = document.getElementById('reg-message');
-            
-            msgBox.classList.add('hidden');
-            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> กำลังดำเนินการ...';
-            btn.disabled = true;
-
-            const data = { name: nameInput, address: addressInput, phone: phoneInput, email: emailInput };
-            const sheetId = localStorage.getItem('pixcel_sheet_id') || '';
-
-            try {
-                const result = await callBackend('registerAgent', data, sheetId);
-                if(result && result.success) {
-                    msgBox.className = "mt-4 text-center p-5 bg-green-50 text-green-800 rounded-lg border border-green-200 font-medium fade-in shadow-sm";
-                    
-                    // ปรับข้อความ หากเป็นโหมดจำลอง
-                    const successText = result.message === "ลงทะเบียนสำเร็จ รอแอดมินอนุมัติ" ? "(ข้อมูลจำลอง)" : "";
-
-                    msgBox.innerHTML = `
-                        <i class="fa-solid fa-circle-check text-4xl mb-3 text-green-500"></i><br>
-                        <span class="text-lg font-bold">สมัครสมาชิกสำเร็จ! ${successText}</span><br>
-                        รหัสตัวแทนของคุณคือ: <b class="text-xl text-green-700">${result.id}</b><br>
-                        <span class="text-sm mt-3 block text-gray-600 bg-white p-2 rounded">โปรดรอ Admin ยืนยันระบบ</span>
-                    `;
-                    msgBox.classList.remove('hidden');
-                    clearInputs('form-register');
-                    btn.classList.add('hidden'); 
-                } else {
-                    alert("ข้อผิดพลาด: " + (result ? result.message : 'ไม่ทราบสาเหตุ'));
-                    btn.innerHTML = '<i class="fa-solid fa-user-plus mr-2"></i> ยืนยันการสมัคร';
-                    btn.disabled = false;
-                }
-            } catch (error) {
-                alert("การเชื่อมต่อล้มเหลว กรุณาลองใหม่อีกครั้ง");
-                btn.innerHTML = '<i class="fa-solid fa-user-plus mr-2"></i> ยืนยันการสมัคร';
-                btn.disabled = false;
-            }
-        }
-
         // ==========================================
         // ฟังก์ชันข้ามเข้าสู่ Dashboard ทันที (สำหรับทดสอบ)
         // ==========================================
@@ -1332,12 +1270,78 @@
             document.getElementById('menu-settings').classList.remove('hidden');
             document.getElementById('btn-add-product').classList.remove('hidden');
             
+            loadAdminData(); // โหลดกระดิ่งแจ้งเตือน
+            
             switchView('view-dashboard');
         }
 
         function handleLogout() {
             switchView('view-login');
             switchTab('tab-profile', document.querySelector('.tab-btn'));
+            document.getElementById('floating-bell').classList.add('hidden');
+        }
+
+        // ==========================================
+        // ฟังก์ชันการอัปโหลดโลโก้บริษัท และ การจัดการข้อมูลบริษัท
+        // ==========================================
+        function handleCompanyLogoUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            if (file.size > 2 * 1024 * 1024) { 
+                alert('ไฟล์รูปภาพต้องมีขนาดไม่เกิน 2MB'); 
+                event.target.value = ''; 
+                return; 
+            }
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const base64Image = e.target.result;
+                const previewContainer = document.getElementById('company-logo-preview');
+                previewContainer.innerHTML = `<img src="${base64Image}" class="w-full h-full object-cover">`;
+                localStorage.setItem('pixcel_company_logo', base64Image);
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function saveCompanySettings(btn) {
+            const data = {
+                name: document.getElementById('comp-name').value,
+                tax: document.getElementById('comp-tax').value,
+                address: document.getElementById('comp-address').value,
+                phone: document.getElementById('comp-phone').value,
+                website: document.getElementById('comp-website').value
+            };
+            localStorage.setItem('pixcel_company_settings', JSON.stringify(data));
+            
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fa-solid fa-check mr-2"></i> บันทึกสำเร็จ!';
+            btn.classList.add('bg-green-500');
+            btn.classList.remove('bg-pastel', 'hover:bg-pastel-dark');
+            
+            setTimeout(() => { 
+                btn.innerHTML = originalText; 
+                btn.classList.remove('bg-green-500');
+                btn.classList.add('bg-pastel', 'hover:bg-pastel-dark');
+            }, 2000);
+        }
+
+        function loadCompanySettings() {
+            const savedLogo = localStorage.getItem('pixcel_company_logo');
+            if (savedLogo) {
+                const previewContainer = document.getElementById('company-logo-preview');
+                if(previewContainer) previewContainer.innerHTML = `<img src="${savedLogo}" class="w-full h-full object-cover">`;
+            }
+            
+            const savedSettingsStr = localStorage.getItem('pixcel_company_settings');
+            if(savedSettingsStr) {
+                try {
+                    const data = JSON.parse(savedSettingsStr);
+                    if(document.getElementById('comp-name')) document.getElementById('comp-name').value = data.name || '';
+                    if(document.getElementById('comp-tax')) document.getElementById('comp-tax').value = data.tax || '';
+                    if(document.getElementById('comp-address')) document.getElementById('comp-address').value = data.address || '';
+                    if(document.getElementById('comp-phone')) document.getElementById('comp-phone').value = data.phone || '';
+                    if(document.getElementById('comp-website')) document.getElementById('comp-website').value = data.website || '';
+                } catch(e){}
+            }
         }
 
         function handleAvatarUpload(event) {
@@ -1459,13 +1463,11 @@
             document.getElementById('cust-calculated-price').innerText = '฿ 0.00';
         }
         
-        // ฟังก์ชันคำนวณราคาอัตโนมัติเมื่อเปลี่ยนจำนวนหน่วย หรือ แพคเกจ
         function calculateCustomerPrice() {
             const units = parseInt(document.getElementById('cust-units').value) || 0;
             const rate = parseFloat(document.getElementById('cust-package').value) || 0;
             const total = units * rate;
             
-            // อัปเดตราคาที่แสดงผลใน UI
             document.getElementById('cust-calculated-price').innerText = new Intl.NumberFormat('th-TH', { style: 'currency', currency: 'THB' }).format(total);
         }
 
@@ -1482,11 +1484,9 @@
                 return;
             }
             
-            // คำนวณยอดสุทธิ
             const total = units * rate;
             const formatTotal = new Intl.NumberFormat('th-TH', { style: 'currency', currency: 'THB' }).format(total);
 
-            // จำลองการเพิ่มลูกค้าลงในตาราง
             const tableBody = document.getElementById('customer-list-body');
             const newRow = document.createElement('tr');
             newRow.className = "border-b hover:bg-gray-50 fade-in";
@@ -1513,6 +1513,85 @@
             closeAddCustomerModal();
             alert("เพิ่มข้อมูลหน่วยงาน/ลูกค้าสำเร็จ");
         }
+
+        // ==========================================
+        // ฟังก์ชันสำหรับตั้งค่าแพคเกจราคา
+        // ==========================================
+        function filterPackages() {
+            const selectedProduct = document.getElementById('package-product-selector').value;
+            const rows = document.querySelectorAll('.package-row');
+            rows.forEach(row => {
+                if(row.getAttribute('data-product') === selectedProduct) {
+                    row.classList.remove('hidden');
+                } else {
+                    row.classList.add('hidden');
+                }
+            });
+        }
+
+        function addPackageRow() {
+            const selectedProduct = document.getElementById('package-product-selector').value;
+            const tbody = document.getElementById('package-list-body');
+            
+            // นับแถวปัจจุบันเพื่อใส่ลำดับเริ่มต้น
+            const visibleRows = Array.from(tbody.querySelectorAll('.package-row')).filter(r => r.getAttribute('data-product') === selectedProduct);
+            const nextSeq = visibleRows.length + 1;
+
+            const tr = document.createElement('tr');
+            tr.className = "border-b hover:bg-gray-50 package-row fade-in";
+            tr.setAttribute('data-product', selectedProduct);
+            tr.innerHTML = `
+                <td class="px-4 py-3 text-center"><input type="number" value="${nextSeq}" class="w-16 px-2 py-1 border border-gray-200 rounded focus:ring-1 focus:ring-pastel outline-none text-center"></td>
+                <td class="px-4 py-3">
+                    <div class="flex items-center justify-center gap-2">
+                        <input type="number" value="" placeholder="เริ่มต้น" class="w-24 px-2 py-1 border border-gray-200 rounded focus:ring-1 focus:ring-pastel outline-none text-center">
+                        <span class="text-gray-400">ถึง</span>
+                        <input type="number" value="" placeholder="สูงสุด" class="w-24 px-2 py-1 border border-gray-200 rounded focus:ring-1 focus:ring-pastel outline-none text-center">
+                    </div>
+                </td>
+                <td class="px-4 py-3 text-right"><input type="number" value="" class="w-full max-w-[120px] px-2 py-1 border border-gray-200 rounded focus:ring-1 focus:ring-pastel outline-none text-right ml-auto"></td>
+                <td class="px-4 py-3 text-center"><button class="text-gray-400 hover:text-red-500" title="ลบรายการนี้" onclick="this.closest('tr').remove()"><i class="fa-solid fa-trash"></i></button></td>
+            `;
+            tbody.appendChild(tr);
+        }
+
+        // ==========================================
+        // ฟังก์ชันสำหรับใบเสร็จชั่วคราว
+        // ==========================================
+        function saveSharedReceipt(btn) {
+            const receiptData = {
+                no: document.getElementById('receipt-no').value,
+                date: document.getElementById('receipt-date').value,
+                customer: document.getElementById('receipt-customer').value,
+                desc: document.getElementById('receipt-desc').value,
+                amount: document.getElementById('receipt-amount').value,
+                method: document.getElementById('receipt-method').value
+            };
+            localStorage.setItem('shared_temporary_receipt', JSON.stringify(receiptData));
+            
+            if (btn) {
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '<i class="fa-solid fa-check mr-2"></i> บันทึกสำเร็จ!';
+                btn.classList.add('bg-green-500');
+                setTimeout(() => { btn.innerHTML = originalText; btn.classList.remove('bg-green-500'); }, 2000);
+            }
+        }
+
+        function loadSharedReceipt() {
+            const savedData = localStorage.getItem('shared_temporary_receipt');
+            if (savedData) {
+                try {
+                    const data = JSON.parse(savedData);
+                    document.getElementById('receipt-no').value = data.no || '';
+                    document.getElementById('receipt-date').value = data.date || '';
+                    document.getElementById('receipt-customer').value = data.customer || '';
+                    document.getElementById('receipt-desc').value = data.desc || '';
+                    document.getElementById('receipt-amount').value = data.amount || '';
+                    document.getElementById('receipt-method').value = data.method || 'cash';
+                } catch(e){}
+            }
+        }
+
     </script>
 </body>
 </html>
